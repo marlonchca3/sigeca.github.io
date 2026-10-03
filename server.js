@@ -5,7 +5,7 @@ const path = require("path");
 const ROOT = __dirname;
 const PORT = Number(process.env.PORT || 4173);
 const HOST = process.env.HOST || "127.0.0.1";
-const CURRENT_DATE = "2026-10-03";
+const CONTRACT_LIMIT = 20;
 const SOURCE = {
   packageId: "3c5b0ca3-d7dc-4808-9ec5-bf42954b8ab8",
   datasetUrl: "https://www.datosabiertos.gob.pe/dataset/contratos-de-las-entidades-organismo-especializado-para-las-contrataciones-p%C3%BAblicas",
@@ -52,24 +52,80 @@ function isDiravpolRecord(record) {
 function parseDate(value) {
   if (!value) return null;
   const text = String(value).trim();
-  if (/^\d{4}-\d{2}-\d{2}/.test(text)) return new Date(text.slice(0, 10));
-  if (/^\d{8}$/.test(text)) return new Date(`${text.slice(0, 4)}-${text.slice(4, 6)}-${text.slice(6, 8)}`);
+  let date;
+  if (/^\d{4}-\d{2}-\d{2}/.test(text)) date = new Date(text.slice(0, 10));
+  else if (/^\d{8}$/.test(text)) date = new Date(`${text.slice(0, 4)}-${text.slice(4, 6)}-${text.slice(6, 8)}`);
   const parts = text.match(/^(\d{1,2})[/-](\d{1,2})[/-](\d{4})/);
-  if (parts) return new Date(`${parts[3]}-${parts[2].padStart(2, "0")}-${parts[1].padStart(2, "0")}`);
-  const date = new Date(text);
+  if (!date && parts) date = new Date(`${parts[3]}-${parts[2].padStart(2, "0")}-${parts[1].padStart(2, "0")}`);
+  if (!date) date = new Date(text);
   return Number.isNaN(date.getTime()) ? null : date;
 }
 
-function isWithinLastYear(record) {
-  const values = Object.entries(record)
-    .filter(([key]) => normalizeText(key).includes("FECHA") || normalizeText(key).includes("DATE"))
-    .map(([, value]) => value);
-  const dates = values.map(parseDate).filter(Boolean);
-  if (!dates.length) return true;
-  const end = new Date(CURRENT_DATE);
-  const start = new Date(end);
-  start.setFullYear(start.getFullYear() - 1);
-  return dates.some((date) => date >= start && date <= end);
+function classifyContract(record) {
+  const release = record.compiledRelease || record;
+  const tender = release.tender || {};
+  const categoryFields = Object.entries(record)
+    .filter(([key]) => /TIPO.*(OBJETO|CONTRATACION)|OBJETO.*(CONTRATACION|PROCESO)|CATEGORIA/i.test(normalizeText(key)))
+    .map(([, value]) => String(value || ""));
+  const categoryText = normalizeText([
+    tender.mainProcurementCategory,
+    ...categoryFields,
+  ].join(" "));
+  const searchText = normalizeText([
+    tender.title,
+    tender.description,
+    ...Object.entries(record)
+      .filter(([key, value]) => /OBJETO|DESCRIPCION|TITULO|CONVOCATORIA/i.test(normalizeText(key)) && typeof value === "string")
+      .map(([, value]) => value),
+  ].join(" "));
+
+  if (/\bWORKS?\b|\bOBRAS?\b/.test(categoryText)) return "Obras";
+  if (/\bGOODS?\b|\bBIEN(?:ES)?\b/.test(categoryText)) return "Bienes";
+  if (/\bSERVICES?\b|\bSERVICIOS?\b/.test(categoryText)) return "Servicios";
+  if (/\bSERVICIOS?\b/.test(searchText)) return "Servicios";
+  if (/\bBIEN(?:ES)?\b/.test(searchText)) return "Bienes";
+  if (/\bOBRAS?\b/.test(searchText)) return "Obras";
+  return null;
+}
+
+function getRecordDate(record) {
+  const release = record.compiledRelease || record;
+  const contract = release.contracts?.[0] || {};
+  const award = release.awards?.[0] || {};
+  const directDate = contract.dateSigned || award.date || release.date || contract.period?.startDate || contract.period?.endDate;
+  if (directDate) return parseDate(directDate);
+
+  const dateFields = Object.entries(record)
+    .filter(([key, value]) => /FECHA|DATE/i.test(normalizeText(key)) && value)
+    .sort(([left], [right]) => {
+      const priority = (key) => /SUSCRIPCION|CONTRATO|FIRMA/i.test(normalizeText(key)) ? 0 : 1;
+      return priority(left) - priority(right);
+    });
+  return dateFields.length ? parseDate(dateFields[0][1]) : null;
+}
+
+function limitRecentByCategory(contracts) {
+  const categories = { Bienes: [], Obras: [], Servicios: [] };
+  const seen = new Set();
+  const sorted = contracts
+    .filter((contract) => Object.hasOwn(categories, contract.category))
+    .sort((a, b) => (Date.parse(b.date || "") || 0) - (Date.parse(a.date || "") || 0));
+
+  for (const contract of sorted) {
+    const key = JSON.stringify([
+      contract.category,
+      normalizeText(contract.id),
+      normalizeText(contract.object),
+      contract.date,
+      contract.value,
+    ]);
+    if (!seen.has(key) && categories[contract.category].length < CONTRACT_LIMIT) {
+      seen.add(key);
+      categories[contract.category].push(contract);
+    }
+  }
+
+  return Object.values(categories).flat();
 }
 
 function pick(record, names, fallback = "No registrado") {
@@ -85,8 +141,8 @@ function formatCurrency(value) {
   return new Intl.NumberFormat("es-PE", { style: "currency", currency: "PEN", maximumFractionDigits: 0 }).format(number);
 }
 
-function getLastYearStart() {
-  const date = new Date(CURRENT_DATE);
+function getRecentSearchStart() {
+  const date = new Date();
   date.setFullYear(date.getFullYear() - 1);
   return date.toISOString().slice(0, 10);
 }
@@ -99,9 +155,8 @@ function extractOcdsRecords(payload) {
   return [];
 }
 
-function mapOcdsContract(record, index) {
+function mapOcdsContract(record, contract, index) {
   const release = record.compiledRelease || record;
-  const contract = release.contracts?.[0] || {};
   const award = release.awards?.[0] || {};
   const supplier = award.suppliers?.[0]?.name || contract.suppliers?.[0]?.name || "No registrado";
   const value = contract.value || award.value || release.tender?.value || {};
@@ -112,9 +167,19 @@ function mapOcdsContract(record, index) {
     object: contract.title || award.title || release.tender?.description || release.tender?.title || "No registrado",
     value: formatCurrency(value.amount),
     status: contract.status || award.status || release.tender?.status || "Registrado",
-    end: contract.period?.endDate || contract.dateSigned || release.date || "Ultimo año",
+    end: contract.period?.endDate || contract.dateSigned || release.date || "No registrado",
+    date: getRecordDate(record)?.toISOString().slice(0, 10) || "",
+    category: classifyContract(record),
     source: "OECE/OCDS",
   };
+}
+
+function mapOcdsContracts(record, index) {
+  const release = record.compiledRelease || record;
+  const contracts = release.contracts || [];
+  return contracts.map((contract, contractIndex) =>
+    mapOcdsContract(record, contract, `${index + 1}-${contractIndex + 1}`)
+  );
 }
 
 function mapSeaceContract(record, index) {
@@ -124,7 +189,9 @@ function mapSeaceContract(record, index) {
     object: pick(record, ["OBJETO", "DESCRIPCION", "PRESTACION", "CONVOCATORIA"]),
     value: formatCurrency(pick(record, ["MONTO", "VALOR", "IMPORTE", "TOTAL"], "")),
     status: pick(record, ["ESTADO", "SITUACION"], "Registrado"),
-    end: pick(record, ["FECHA_FIN", "FECHA_CULMINACION", "FECHA_SUSCRIPCION", "FECHA"], "Ultimo año"),
+    end: pick(record, ["FECHA_FIN", "FECHA_CULMINACION", "FECHA_SUSCRIPCION", "FECHA"], "No registrado"),
+    date: getRecordDate(record)?.toISOString().slice(0, 10) || "",
+    category: classifyContract(record),
     source: "Datos Abiertos/OECE",
   };
 }
@@ -147,16 +214,26 @@ async function fetchJson(url) {
 
 async function fetchOcdsContracts() {
   let records = [];
-  for (let page = 1; page <= 5; page += 1) {
-    const url = `${SOURCE.ocdsBase}/recordsAfter?date=${getLastYearStart()}&page=${page}`;
+  for (let page = 1; page <= 20; page += 1) {
+    const url = `${SOURCE.ocdsBase}/recordsAfter?date=${getRecentSearchStart()}&page=${page}`;
     const payload = await fetchJson(url);
     const pageRecords = extractOcdsRecords(payload);
     records = records.concat(pageRecords);
     if (!pageRecords.length) break;
+
+    const categorizedCounts = limitRecentByCategory(records
+      .filter((record) => isDiravpolRecord(record) && classifyContract(record))
+      .flatMap(mapOcdsContracts))
+      .map((contract) => contract.category)
+      .reduce((counts, category) => {
+        if (category) counts[category] += 1;
+        return counts;
+      }, { Bienes: 0, Obras: 0, Servicios: 0 });
+    if (Object.values(categorizedCounts).every((count) => count >= CONTRACT_LIMIT)) break;
   }
   return records
-    .filter((record) => isDiravpolRecord(record) && isWithinLastYear(record.compiledRelease || record))
-    .map(mapOcdsContract);
+    .filter((record) => isDiravpolRecord(record) && classifyContract(record))
+    .flatMap(mapOcdsContracts);
 }
 
 async function fetchDatasetContracts() {
@@ -181,40 +258,63 @@ async function fetchDatasetContracts() {
   const unique = Array.from(new Map(records.map((record) => [JSON.stringify(record), record])).values());
 
   return unique
-    .filter((record) => isDiravpolRecord(record) && isWithinLastYear(record))
+    .filter((record) => isDiravpolRecord(record) && classifyContract(record))
     .map(mapSeaceContract);
 }
 
 async function loadContracts() {
   const attempts = [];
+  const availableContracts = [];
+  const sources = [];
+  const hasTwentyPerCategory = (contracts) => {
+    const counts = contracts.reduce((result, contract) => {
+      result[contract.category] += 1;
+      return result;
+    }, { Bienes: 0, Obras: 0, Servicios: 0 });
+    return Object.values(counts).every((count) => count >= CONTRACT_LIMIT);
+  };
 
   try {
     const contracts = await fetchOcdsContracts();
-    attempts.push({ source: "OECE/OCDS", ok: true, count: contracts.length });
-    if (contracts.length) {
-      return { ok: true, source: "OECE/OCDS", sourceUrl: SOURCE.ocdsUrl, contracts, attempts };
-    }
+    availableContracts.push(...contracts);
+    sources.push("OECE/OCDS");
+    attempts.push({ source: "OECE/OCDS", ok: true, count: limitRecentByCategory(contracts).length });
   } catch (error) {
     attempts.push({ source: "OECE/OCDS", ok: false, error: error.message });
   }
 
-  try {
-    const contracts = await fetchDatasetContracts();
-    attempts.push({ source: "Datos Abiertos/OECE", ok: true, count: contracts.length });
-    if (contracts.length) {
-      return { ok: true, source: "Datos Abiertos/OECE", sourceUrl: SOURCE.datasetUrl, contracts, attempts };
+  if (!hasTwentyPerCategory(limitRecentByCategory(availableContracts))) {
+    try {
+      const contracts = await fetchDatasetContracts();
+      availableContracts.push(...contracts);
+      sources.push("Datos Abiertos/OECE");
+      attempts.push({ source: "Datos Abiertos/OECE", ok: true, count: limitRecentByCategory(contracts).length });
+    } catch (error) {
+      attempts.push({ source: "Datos Abiertos/OECE", ok: false, error: error.message });
     }
-  } catch (error) {
-    attempts.push({ source: "Datos Abiertos/OECE", ok: false, error: error.message });
+  }
+
+  const contracts = limitRecentByCategory(availableContracts);
+  if (attempts.every((attempt) => !attempt.ok)) {
+    return {
+      ok: false,
+      source: "Fuentes oficiales no disponibles",
+      sourceUrl: SOURCE.datasetUrl,
+      contracts: [],
+      attempts,
+      message: "No fue posible consultar las fuentes oficiales OECE/SEACE.",
+    };
   }
 
   return {
     ok: true,
-    source: "Sin coincidencias oficiales",
-    sourceUrl: SOURCE.datasetUrl,
-    contracts: [],
+    source: sources.join(" + ") || "Sin coincidencias oficiales",
+    sourceUrl: sources.includes("Datos Abiertos/OECE") ? SOURCE.datasetUrl : SOURCE.ocdsUrl,
+    contracts,
     attempts,
-    message: "Las fuentes oficiales respondieron correctamente, pero no devolvieron contratos DIRAVPOL consultables para el ultimo año desde este entorno.",
+    message: contracts.length
+      ? undefined
+      : "Las fuentes oficiales respondieron correctamente, pero no devolvieron registros clasificables de bienes, obras o servicios para DIRAVPOL.",
   };
 }
 
@@ -271,7 +371,7 @@ const server = http.createServer(async (request, response) => {
       sendJson(response, result.ok ? 200 : 502, {
         ...result,
         lastSync: new Intl.DateTimeFormat("es-PE", { dateStyle: "medium", timeStyle: "short" }).format(new Date()),
-        window: { from: getLastYearStart(), to: CURRENT_DATE },
+        limitPerCategory: CONTRACT_LIMIT,
       });
     } catch (error) {
       sendJson(response, 500, { ok: false, message: error.message, contracts: [] });

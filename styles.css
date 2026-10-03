@@ -509,6 +509,47 @@ h3 {
   background: #f7fbff;
 }
 
+.sync-banner small {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--muted);
+}
+
+.contract-results {
+  margin-top: 18px;
+}
+
+.contract-category {
+  margin-top: 24px;
+}
+
+.contract-category h2 {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 10px;
+}
+
+.contract-category h2 span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.empty-contracts {
+  margin: 0;
+  padding: 16px;
+  border: 1px dashed var(--line);
+  border-radius: 7px;
+  color: var(--muted);
+}
+
+.header-actions .btn:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
 .seace-shell {
   margin-top: 22px;
   overflow: hidden;

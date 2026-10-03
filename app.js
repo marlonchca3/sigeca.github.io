@@ -29,11 +29,6 @@ const sourceData = {
     { id: "CP-001-2025", title: "Mantenimiento programado flota MI-171", method: "Concurso publico", stage: "Bases publicadas", progress: 44, risk: "Alto" },
     { id: "DIRECTA-002-2025", title: "Servicio tecnico por proveedor exclusivo", method: "Contratacion directa", stage: "Informe tecnico", progress: 78, risk: "Bajo" },
   ],
-  contracts: [
-    { id: "CON-041-2024", supplier: "AeroAndes SAC", object: "Overhaul de transmision principal", value: "S/ 1,940,000", status: "Ejecucion", end: "18 abr 2025" },
-    { id: "CON-052-2024", supplier: "HeliParts Peru", object: "Repuestos certificados", value: "S/ 684,500", status: "Por conformidad", end: "02 mar 2025" },
-    { id: "CON-006-2025", supplier: "TecnoAvionics", object: "Calibracion de equipos", value: "S/ 216,000", status: "Inicio", end: "28 may 2025" },
-  ],
   suppliers: [
     { name: "AeroAndes SAC", specialty: "Mantenimiento mayor", score: 94, docs: "Vigente", sanctions: "Sin sanciones" },
     { name: "HeliParts Peru", specialty: "Repuestos aeronauticos", score: 86, docs: "Por renovar", sanctions: "Sin sanciones" },
@@ -58,27 +53,6 @@ const sourceData = {
     { date: "21 feb 09:15", title: "Conformidad pendiente", text: "El contrato CON-052-2024 espera validacion del area tecnica." },
   ],
 };
-
-const fallbackSeaceRows = [
-  {
-    id: "CP SER-SM-8-2026-DIRAVPOL-1",
-    date: "24/09/2026 15:50",
-    object: "CONTRATACION DEL SERVICIO DE MANTENIMIENTO DE COMPONENTES PARA LA FLOTA DE HELICOPTEROS EC-145",
-    value: "---",
-  },
-  {
-    id: "CP SER-SM-7-2026-DIRAVPOL-1",
-    date: "05/08/2026 17:39",
-    object: "SERVICIO DE MANTENIMIENTO DE COMPONENTES Y APROVISIONAMIENTO DE PARTES PARA LA FLOTA DE HELICOPTEROS EC-145",
-    value: "---",
-  },
-  {
-    id: "CP SER-SM-6-2026-DIRAVPOL-1",
-    date: "03/08/2026 18:10",
-    object: "CONTRATACION DEL SERVICIO DE DECAPADO, TRATAMIENTO ANTICORROSIVO Y PINTADO GENERAL DE AERONAVES",
-    value: "---",
-  },
-];
 
 const ModuleHeader = {
   props: {
@@ -150,13 +124,13 @@ createApp({
       return this.views[this.currentView];
     },
     contracts() {
-      return this.liveContracts || this.data.contracts;
+      return this.liveContracts || [];
     },
     contractCount() {
       return this.contracts.length;
     },
     contractHint() {
-      return this.liveContracts ? `${this.contractSync.lastSync} · fuente OECE/SEACE` : "Use Sincronizar SEACE para traer contratos reales";
+      return this.liveContracts ? `${this.contractSync.lastSync} · fuente OECE/SEACE` : "Consulte las fuentes oficiales para ver contratos DIRAVPOL";
     },
     selectedRequirement() {
       return this.data.requirements.find((item) => item.id === this.selectedRequirementId) || null;
@@ -176,13 +150,10 @@ createApp({
     filteredContracts() {
       return this.contracts.filter((item) => this.matchesQuery([item.id, item.supplier, item.object, item.status]) && this.matchesStatus(item.status));
     },
-    seaceRows() {
-      if (!this.liveContracts) return fallbackSeaceRows;
-      return this.filteredContracts.map((item) => ({
-        id: item.id,
-        date: item.end,
-        object: item.object,
-        value: item.value,
+    contractGroups() {
+      return ["Bienes", "Obras", "Servicios"].map((category) => ({
+        category,
+        contracts: this.filteredContracts.filter((contract) => contract.category === category),
       }));
     },
   },
@@ -193,6 +164,9 @@ createApp({
       this.query = "";
       this.status = "Todos";
       this.sidebarOpen = false;
+      if (view === "contratos" && !this.contractSync.lastSync && this.contractSync.status !== "loading") {
+        this.syncContractsFromSeace();
+      }
     },
     statusClass(value) {
       const text = String(value).toLowerCase();
@@ -256,7 +230,7 @@ createApp({
       this.contractSync = {
         ...this.contractSync,
         status: "loading",
-        message: "Consultando contratos del último año mediante el backend local...",
+        message: "Consultando fuentes oficiales para obtener hasta 20 contratos recientes por categoría...",
       };
 
       try {
@@ -271,13 +245,19 @@ createApp({
         if (!response.ok || !result.ok) {
           throw Object.assign(new Error(result.message || `HTTP ${response.status}`), { result });
         }
-        const contracts = result.contracts.slice(0, 60);
-        this.liveContracts = contracts.length ? contracts : null;
+        const contracts = result.contracts;
+        this.liveContracts = contracts;
+        const counts = Object.fromEntries(
+          ["Bienes", "Obras", "Servicios"].map((category) => [
+            category,
+            contracts.filter((contract) => contract.category === category).length,
+          ])
+        );
         this.contractSync = {
           status: "ok",
           message: contracts.length
-            ? `Sincronizado con ${contracts.length} contrato(s) DIRAVPOL del último año desde ${result.source}.`
-            : `${result.message || "No se encontraron coincidencias oficiales para DIRAVPOL."} Se muestran registros de respaldo local.`,
+            ? `Consulta completada desde ${result.source}: ${counts.Bienes} bienes, ${counts.Obras} obras y ${counts.Servicios} servicios. Se muestran como máximo 20 por categoría.`
+            : result.message || "No se encontraron contratos clasificables de DIRAVPOL en las fuentes oficiales.",
           lastSync: result.lastSync,
           sourceUrl: result.sourceUrl,
           attempts: result.attempts || [],
@@ -289,7 +269,7 @@ createApp({
           : error.message;
         this.contractSync = {
           status: "error",
-          message: `No se pudo sincronizar desde el backend local: ${message}. Se mantiene respaldo local y enlace a la fuente oficial.`,
+          message: `No se pudo sincronizar desde las fuentes oficiales: ${message}. No se muestran registros de respaldo para evitar confundirlos con contratos reales.`,
           lastSync: null,
           sourceUrl: error.result?.sourceUrl || SEACE_SOURCE.datasetUrl,
           attempts: error.result?.attempts || [],
@@ -480,13 +460,59 @@ createApp({
             </template>
 
             <template v-else-if="currentView === 'contratos'">
-              <section class="seace-link-panel">
+              <section class="module-header">
                 <div>
-                  <span class="module-kicker">Portal oficial SEACE</span>
-                  <h1>Contratos SEACE</h1>
-                  <p class="lead">El portal oficial bloquea su uso dentro de iframes externos. Abre el buscador público en una pestaña nueva para consultar procedimientos y contratos directamente en SEACE.</p>
-                  <a class="btn primary" href="https://prod2.seace.gob.pe/seacebus-uiwd-pub/buscadorPublico/buscadorPublico.xhtml" target="_blank" rel="noreferrer">Abrir SEACE</a>
+                  <p class="eyebrow">Fuente oficial OECE / SEACE</p>
+                  <h1>Contratos de DIRAVPOL</h1>
+                  <p class="lead">Consulta únicamente registros de DIRAVPOL, separados por bienes, obras y servicios. Se muestran hasta los 20 más recientes disponibles por categoría.</p>
                 </div>
+                <div class="header-actions">
+                  <button class="btn primary" :disabled="contractSync.status === 'loading'" @click="syncContractsFromSeace">
+                    {{ contractSync.status === 'loading' ? 'Consultando...' : 'Consultar contratos' }}
+                  </button>
+                </div>
+              </section>
+
+              <section class="panel contract-results">
+                <div class="sync-banner" :class="contractSync.status">
+                  <div>
+                    <p>{{ contractSync.message }}</p>
+                    <small v-if="contractSync.lastSync">Última consulta: {{ contractSync.lastSync }}</small>
+                    <div v-if="contractSync.attempts.length" class="attempt-list">
+                      <span v-for="attempt in contractSync.attempts" :key="attempt.source" :class="attempt.ok ? 'ok' : 'bad'">
+                        {{ attempt.source }}: {{ attempt.ok ? attempt.count + ' registros' : attempt.error }}
+                      </span>
+                    </div>
+                    <div class="source-links">
+                      <a :href="contractSync.sourceUrl || SEACE_SOURCE.datasetUrl" target="_blank" rel="noreferrer">Fuente consultada</a>
+                      <a :href="SEACE_SOURCE.ocdsUrl" target="_blank" rel="noreferrer">Portal de Contrataciones Abiertas</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="toolbar">
+                  <input class="search" v-model="query" type="search" placeholder="Buscar por contrato, proveedor u objeto...">
+                </div>
+                <section v-for="group in contractGroups" :key="group.category" class="contract-category">
+                  <h2>{{ group.category }} <span>{{ group.contracts.length }} de 20</span></h2>
+                  <div v-if="group.contracts.length" class="table-wrap">
+                    <table>
+                      <thead><tr><th>Fecha</th><th>Contrato / proceso</th><th>Objeto</th><th>Proveedor</th><th>Monto</th><th>Estado</th></tr></thead>
+                      <tbody>
+                        <tr v-for="contract in group.contracts" :key="group.category + '-' + contract.id">
+                          <td>{{ contract.date || contract.end }}</td>
+                          <td><b>{{ contract.id }}</b></td>
+                          <td>{{ contract.object }}</td>
+                          <td>{{ contract.supplier }}</td>
+                          <td>{{ contract.value }}</td>
+                          <td>{{ contract.status }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <p v-else class="empty-contracts">
+                    {{ liveContracts === null ? 'Consulta las fuentes oficiales para cargar esta categoría.' : query ? 'No hay coincidencias para la búsqueda.' : 'No hay registros oficiales disponibles para esta categoría.' }}
+                  </p>
+                </section>
               </section>
             </template>
 
