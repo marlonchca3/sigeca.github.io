@@ -483,7 +483,7 @@ createApp({
               <section class="seace-embed">
                 <iframe
                   title="SEACE 3.0 - Buscador Público"
-                  src="https://prod1.seace.gob.pe/SeaceWeb-PRO/public/buscarProcedimientosSeleccion.iface?init=1"
+                  src="https://prod2.seace.gob.pe/seacebus-uiwd-pub/buscadorPublico/buscadorPublico.xhtml"
                   loading="lazy"
                   referrerpolicy="no-referrer-when-downgrade"
                 ></iframe>
