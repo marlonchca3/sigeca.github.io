@@ -480,41 +480,13 @@ createApp({
             </template>
 
             <template v-else-if="currentView === 'contratos'">
-              <module-header title="Contratos SEACE del ultimo año" lead="Control de ejecucion contractual DIRAVPOL sincronizable con el dataset oficial de contratos de las entidades publicado por OECE/SEACE." :stats="[{ value: contracts.length, label: liveContracts ? 'contratos reales' : 'registros respaldo' }, { value: liveContracts ? 'OECE' : 'Local', label: 'fuente activa' }, { value: liveContracts ? 'SEACE' : 'S/ 2.8M', label: 'monto comprometido' }, { value: '365 dias', label: 'ventana consultada' }]" />
-              <section class="seace-shell">
-                <div class="seace-tabs"><button>Anuncio de Contratacion Futura</button><button class="active">Buscador de Procedimientos de Seleccion</button><button>Buscador de Expresiones de Interes</button><button>Buscador Publico de Ordenes de Compra y Ordenes de Servicio</button></div>
-                <div class="seace-form">
-                  <div class="seace-grid">
-                    <label><span>Nombre o Sigla de Entidad</span><input value="POLICIA NACIONAL DEL PERU - DIRECCION DE AVIACION" readonly></label>
-                    <label><span>Tipo de Seleccion</span><select><option>[Seleccione]</option></select></label>
-                    <label><span>Objeto de Contratacion</span><select><option>[Seleccione]</option><option>Bien</option><option>Servicio</option><option>Obra</option></select></label>
-                    <label><span>Nro. Seleccion</span><input value="" readonly></label>
-                    <label><span>Descripcion del Objeto</span><input value="" readonly></label>
-                    <label><span>Año de la Convocatoria *</span><select><option>2026</option></select></label>
-                    <label><span>Version SEACE</span><select><option>Seace 3</option></select></label>
-                    <label><span>Codigo SNIP</span><input value="" readonly></label>
-                    <label><span>Codigo Unico de Inversion</span><input value="" readonly></label>
-                  </div>
-                  <div class="seace-actions">
-                    <button class="btn" @click="handleAction('new')">+ Busqueda Avanzada</button>
-                    <div><button class="btn primary" @click="syncContractsFromSeace">{{ contractSync.status === 'loading' ? 'Buscando...' : 'Buscar' }}</button><button class="btn" @click="clearSyncSearch">Limpiar</button></div>
-                    <button class="btn" @click="handleAction('export')">Exportar a Excel</button>
-                  </div>
-                </div>
-                <div class="sync-banner" :class="contractSync.status">
-                  <div>
-                    <span class="module-kicker">Fuente oficial</span>
-                    <p>{{ contractSync.message }}</p>
-                    <div v-if="contractSync.attempts.length" class="attempt-list">
-                      <span v-for="attempt in contractSync.attempts" :key="attempt.source" :class="attempt.ok ? 'ok' : 'bad'">{{ attempt.source }}: {{ attempt.ok ? attempt.count + ' registros' : attempt.error }}</span>
-                    </div>
-                    <div class="source-links"><a :href="contractSync.sourceUrl" target="_blank" rel="noreferrer">Abrir fuente consultada</a><a :href="SEACE_SOURCE.ocdsUrl" target="_blank" rel="noreferrer">API OCDS OECE</a></div>
-                  </div>
-                </div>
-                <div class="seace-result-title">Codigos SNIP</div>
-                <div class="table-wrap seace-table"><table><thead><tr><th>N.</th><th>Nombre o Sigla de la Entidad</th><th>Fecha y Hora de Publicacion</th><th>Nomenclatura</th><th>Objeto de Contratacion</th><th>Descripcion de Objeto</th><th>Codigo SNIP</th><th>VR / VE / Cuantia</th><th>Version SEACE</th><th>Acciones</th></tr></thead><tbody>
-                  <tr v-for="(item, index) in seaceRows" :key="item.id"><td>{{ index + 1 }}</td><td><b>POLICIA NACIONAL DEL PERU<br>- DIRECCION DE AVIACION</b></td><td>{{ item.date }}</td><td><b>{{ item.id }}</b></td><td>Servicio</td><td>{{ item.object }}</td><td>---</td><td>{{ item.value }}</td><td>3</td><td class="actions"><button class="mini" @click="handleAction('open')">Ver</button><button class="mini" @click="handleAction('conformity')">Ficha</button></td></tr>
-                </tbody></table></div>
+              <section class="seace-embed">
+                <iframe
+                  title="SEACE 3.0 - Buscador Público"
+                  src="https://prod1.seace.gob.pe/SeaceWeb-PRO/public/buscarProcedimientosSeleccion.iface?init=1"
+                  loading="lazy"
+                  referrerpolicy="no-referrer-when-downgrade"
+                ></iframe>
               </section>
             </template>
 
