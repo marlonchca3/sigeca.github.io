@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "build": "node --check app.js && node --check server.js",
+    "deploy": "npm run build && git push origin master",
+    "dev": "node server.js",
     "start": "node server.js"
   }
 }
