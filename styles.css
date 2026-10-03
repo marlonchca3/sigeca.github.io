@@ -663,6 +663,27 @@ h3 {
   border: 0;
 }
 
+.seace-link-panel {
+  display: grid;
+  min-height: calc(100vh - 180px);
+  place-items: center;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.seace-link-panel > div {
+  max-width: 760px;
+}
+
+.seace-link-panel .lead {
+  margin-right: auto;
+  margin-left: auto;
+}
+
 .sync-banner.loading {
   border-color: #c7d2fe;
   background: #eef2ff;

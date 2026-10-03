@@ -480,13 +480,13 @@ createApp({
             </template>
 
             <template v-else-if="currentView === 'contratos'">
-              <section class="seace-embed">
-                <iframe
-                  title="SEACE 3.0 - Buscador Público"
-                  src="https://prod2.seace.gob.pe/seacebus-uiwd-pub/buscadorPublico/buscadorPublico.xhtml"
-                  loading="lazy"
-                  referrerpolicy="no-referrer-when-downgrade"
-                ></iframe>
+              <section class="seace-link-panel">
+                <div>
+                  <span class="module-kicker">Portal oficial SEACE</span>
+                  <h1>Contratos SEACE</h1>
+                  <p class="lead">El portal oficial bloquea su uso dentro de iframes externos. Abre el buscador público en una pestaña nueva para consultar procedimientos y contratos directamente en SEACE.</p>
+                  <a class="btn primary" href="https://prod2.seace.gob.pe/seacebus-uiwd-pub/buscadorPublico/buscadorPublico.xhtml" target="_blank" rel="noreferrer">Abrir SEACE</a>
+                </div>
               </section>
             </template>
 
