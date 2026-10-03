@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIGECA | Gestión de Contrataciones Aeropoliciales</title>
+  <link rel="icon" type="image/jpeg" href="assets/DIVMAAER.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand-block">
+        <img class="crest" src="assets/DIVMAAER.jpg" alt="Escudo de la División de Mantenimiento Aeropolicial" />
+        <div>
+          <strong>DIRAVPOL</strong>
+          <span>UNIDAD EJECUTORA N.º 18</span>
+        </div>
+      </div>
+      <div class="brand-title"><span class="brand-mark">✦</span><div><b>SIGECA</b><small>Sistema Inteligente de Gestión<br>de Contrataciones Aeropoliciales</small></div></div>
+      <nav class="main-nav" aria-label="Navegación principal">
+        <button class="nav-item active" data-view="inicio"><span>⌂</span>Inicio</button>
+        <button class="nav-item" data-view="requerimientos"><span>▤</span>Requerimientos</button>
+        <button class="nav-item" data-view="procesos"><span>◈</span>Procesos</button>
+        <button class="nav-item" data-view="contratos"><span>▣</span>Contratos</button>
+        <button class="nav-item" data-view="proveedores"><span>◉</span>Proveedores</button>
+        <button class="nav-item" data-view="aeronaves"><span>✈</span>Aeronaves</button>
+        <button class="nav-item" data-view="alertas"><span>⚠</span>Alertas y Riesgos <em class="nav-badge">4</em></button>
+      </nav>
+      <div class="sidebar-footer"><span class="live-dot"></span> Prototipo académico<br><small>Datos ficticios · 2025</small></div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobileMenu" aria-label="Abrir menú">☰</button>
+        <div class="breadcrumb"><span>DIRAVPOL</span><b>/</b><strong id="pageName">Centro de control</strong></div>
+        <div class="top-actions">
+          <button class="icon-button" aria-label="Notificaciones" data-view="alertas">♢<span class="notification-dot"></span></button>
+          <div class="user-chip"><div class="avatar">CR</div><div><b>Cap. R. Castro</b><small>Jefe de Logística</small></div><span>⌄</span></div>
+        </div>
+      </header>
+      <div id="app" class="page"></div>
+      <footer class="page-footer"><span>SIGECA v1.0 · Prototipo de tesis</span><span>DIRAVPOL PNP · Unidad Ejecutora N.º 18</span><span>Última actualización: hoy, 10:24</span></footer>
+    </main>
+  </div>
+  <div id="toast" class="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>
