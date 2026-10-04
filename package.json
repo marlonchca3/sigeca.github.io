@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "node --check app.js && node --check server.js",
+    "build": "node --check app.js && node --check server.js && node --check scripts/sync-contracts.js",
+    "sync:contracts": "node scripts/sync-contracts.js",
     "deploy": "npm run build && git push origin master",
     "dev": "node server.js",
     "start": "node server.js"

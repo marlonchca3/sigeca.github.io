@@ -391,6 +391,10 @@ const server = http.createServer(async (request, response) => {
   await serveStatic(request, response);
 });
 
-server.listen(PORT, HOST, () => {
-  console.log(`SIGECA listo en http://${HOST}:${PORT}`);
-});
+if (require.main === module) {
+  server.listen(PORT, HOST, () => {
+    console.log(`SIGECA listo en http://${HOST}:${PORT}`);
+  });
+}
+
+module.exports = { loadContracts };

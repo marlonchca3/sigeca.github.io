@@ -15,7 +15,7 @@ const SEACE_SOURCE = {
   ocdsUrl: "https://contratacionesabiertas.oece.gob.pe/api",
 };
 
-const API_BASE = window.location.port === "4173" ? "" : "http://127.0.0.1:4173";
+const CONTRACTS_URL = window.location.port === "4173" ? "/api/contracts" : "contracts.json";
 
 const sourceData = {
   requirements: [
@@ -234,13 +234,13 @@ createApp({
       };
 
       try {
-        const response = await fetch(`${API_BASE}/api/contracts`, { cache: "no-store" });
+        const response = await fetch(CONTRACTS_URL, { cache: "no-store" });
         const text = await response.text();
         let result;
         try {
           result = JSON.parse(text);
         } catch {
-          throw new Error("El servidor local no devolvio JSON valido. Abre la app con `npm start` o verifica que el backend este activo en el puerto 4173");
+          throw new Error("La respuesta de contratos no contiene JSON valido.");
         }
         if (!response.ok || !result.ok) {
           throw Object.assign(new Error(result.message || `HTTP ${response.status}`), { result });
@@ -265,7 +265,9 @@ createApp({
       } catch (error) {
         this.liveContracts = null;
         const message = error instanceof TypeError
-          ? "No se pudo conectar al backend local. Ejecuta `npm start` y abre http://127.0.0.1:4173"
+          ? window.location.port === "4173"
+            ? "No se pudo conectar al backend local. Ejecuta `npm start` y abre http://127.0.0.1:4173"
+            : "No se pudo cargar la copia pública de contratos. Verifica que contracts.json exista en el sitio."
           : error.message;
         this.contractSync = {
           status: "error",
