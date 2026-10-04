@@ -164,7 +164,7 @@ createApp({
       this.query = "";
       this.status = "Todos";
       this.sidebarOpen = false;
-      if (view === "contratos" && !this.contractSync.lastSync && this.contractSync.status !== "loading") {
+      if (view === "contratos" && this.contractSync.status !== "loading") {
         this.syncContractsFromSeace();
       }
     },
@@ -230,7 +230,7 @@ createApp({
       this.contractSync = {
         ...this.contractSync,
         status: "loading",
-        message: "Consultando fuentes oficiales para obtener hasta 20 contratos recientes por categoría...",
+        message: "Sincronizando con las fuentes oficiales: hasta 20 contratos recientes por categoría...",
       };
 
       try {
@@ -468,7 +468,7 @@ createApp({
                 </div>
                 <div class="header-actions">
                   <button class="btn primary" :disabled="contractSync.status === 'loading'" @click="syncContractsFromSeace">
-                    {{ contractSync.status === 'loading' ? 'Consultando...' : 'Consultar contratos' }}
+                    {{ contractSync.status === 'loading' ? 'Sincronizando...' : 'Sincronizar contratos' }}
                   </button>
                 </div>
               </section>

@@ -11,18 +11,12 @@ const SOURCE = {
   datasetUrl: "https://www.datosabiertos.gob.pe/dataset/contratos-de-las-entidades-organismo-especializado-para-las-contrataciones-p%C3%BAblicas",
   ocdsUrl: "https://contratacionesabiertas.oece.gob.pe/api",
   ocdsBase: "https://contratacionesabiertas.oece.gob.pe/api/v1",
+  buyerId: "PE-CONSUCODE-10159",
   apiBase: "https://www.datosabiertos.gob.pe/api/3/action",
   entityTerms: [
     "DIRAVPOL",
     "DIRECCION DE AVIACION POLICIAL",
-    "DIRECCIÓN DE AVIACIÓN POLICIAL",
     "AVIACION POLICIAL",
-    "AVIACIÓN POLICIAL",
-    "UNIDAD EJECUTORA 018",
-    "UNIDAD EJECUTORA N 18",
-    "POLICIA NACIONAL DEL PERU",
-    "POLICÍA NACIONAL DEL PERÚ",
-    "20428696515",
   ],
 };
 
@@ -41,12 +35,28 @@ function normalizeText(value) {
   return String(value || "")
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
     .toUpperCase();
 }
 
 function isDiravpolRecord(record) {
-  const text = normalizeText(JSON.stringify(record));
-  return SOURCE.entityTerms.some((term) => text.includes(normalizeText(term)));
+  const entityNames = [];
+  const entityField = /BUYER|PURCHASER|ENTITY|ENTIDAD|INSTITUTION|INSTITUCION|AGENCY|AGENCIA|CONTRACTING|EJECUTORA/i;
+
+  function collectEntityNames(value, inEntityField = false) {
+    if (!value || typeof value !== "object") return;
+    for (const [key, nestedValue] of Object.entries(value)) {
+      const isEntityField = inEntityField || entityField.test(normalizeText(key));
+      if (isEntityField && typeof nestedValue === "string") entityNames.push(nestedValue);
+      else if (nestedValue && typeof nestedValue === "object") collectEntityNames(nestedValue, isEntityField);
+    }
+  }
+
+  collectEntityNames(record);
+  return entityNames.some((name) =>
+    SOURCE.entityTerms.some((term) => normalizeText(name).includes(normalizeText(term)))
+  );
 }
 
 function parseDate(value) {
@@ -88,9 +98,9 @@ function classifyContract(record) {
   return null;
 }
 
-function getRecordDate(record) {
+function getRecordDate(record, contractRecord = null) {
   const release = record.compiledRelease || record;
-  const contract = release.contracts?.[0] || {};
+  const contract = contractRecord || release.contracts?.[0] || {};
   const award = release.awards?.[0] || {};
   const directDate = contract.dateSigned || award.date || release.date || contract.period?.startDate || contract.period?.endDate;
   if (directDate) return parseDate(directDate);
@@ -141,20 +151,6 @@ function formatCurrency(value) {
   return new Intl.NumberFormat("es-PE", { style: "currency", currency: "PEN", maximumFractionDigits: 0 }).format(number);
 }
 
-function getRecentSearchStart() {
-  const date = new Date();
-  date.setFullYear(date.getFullYear() - 1);
-  return date.toISOString().slice(0, 10);
-}
-
-function extractOcdsRecords(payload) {
-  if (Array.isArray(payload?.records)) return payload.records;
-  if (Array.isArray(payload?.data)) return payload.data;
-  if (Array.isArray(payload?.result)) return payload.result;
-  if (Array.isArray(payload)) return payload;
-  return [];
-}
-
 function mapOcdsContract(record, contract, index) {
   const release = record.compiledRelease || record;
   const award = release.awards?.[0] || {};
@@ -168,7 +164,7 @@ function mapOcdsContract(record, contract, index) {
     value: formatCurrency(value.amount),
     status: contract.status || award.status || release.tender?.status || "Registrado",
     end: contract.period?.endDate || contract.dateSigned || release.date || "No registrado",
-    date: getRecordDate(record)?.toISOString().slice(0, 10) || "",
+    date: getRecordDate(record, contract)?.toISOString().slice(0, 10) || "",
     category: classifyContract(record),
     source: "OECE/OCDS",
   };
@@ -197,10 +193,13 @@ function mapSeaceContract(record, index) {
 }
 
 async function fetchJson(url) {
+  const origin = new URL(url).origin;
   const response = await fetch(url, {
     headers: {
       accept: "application/json,text/plain,*/*",
       "user-agent": "SIGECA-DIRAVPOL/1.0 (+local academic prototype)",
+      origin,
+      referer: `${origin}/`,
     },
   });
   const text = await response.text();
@@ -213,27 +212,39 @@ async function fetchJson(url) {
 }
 
 async function fetchOcdsContracts() {
-  let records = [];
-  for (let page = 1; page <= 20; page += 1) {
-    const url = `${SOURCE.ocdsBase}/recordsAfter?date=${getRecentSearchStart()}&page=${page}`;
-    const payload = await fetchJson(url);
-    const pageRecords = extractOcdsRecords(payload);
-    records = records.concat(pageRecords);
-    if (!pageRecords.length) break;
+  const categories = [
+    { source: "goods", name: "Bienes" },
+    { source: "works", name: "Obras" },
+    { source: "services", name: "Servicios" },
+  ];
 
-    const categorizedCounts = limitRecentByCategory(records
-      .filter((record) => isDiravpolRecord(record) && classifyContract(record))
-      .flatMap(mapOcdsContracts))
-      .map((contract) => contract.category)
-      .reduce((counts, category) => {
-        if (category) counts[category] += 1;
-        return counts;
-      }, { Bienes: 0, Obras: 0, Servicios: 0 });
-    if (Object.values(categorizedCounts).every((count) => count >= CONTRACT_LIMIT)) break;
-  }
-  return records
-    .filter((record) => isDiravpolRecord(record) && classifyContract(record))
-    .flatMap(mapOcdsContracts);
+  const results = await Promise.all(categories.map(async ({ source, name }) => {
+    const contracts = [];
+    let page = 1;
+
+    while (page <= 100) {
+      const params = new URLSearchParams({
+        entity: SOURCE.buyerId,
+        category: source,
+        page: String(page),
+        paginateBy: "100",
+        format: "json",
+      });
+      const payload = await fetchJson(`${SOURCE.ocdsBase}/search?${params}`);
+      const records = Array.isArray(payload.results) ? payload.results : [];
+      contracts.push(...records
+        .filter(isDiravpolRecord)
+        .flatMap(mapOcdsContracts)
+        .filter((contract) => contract.category === name));
+
+      if (!payload.pagination?.has_next || !records.length) break;
+      page += 1;
+    }
+
+    return contracts;
+  }));
+
+  return results.flat();
 }
 
 async function fetchDatasetContracts() {
@@ -245,6 +256,9 @@ async function fetchDatasetContracts() {
     return name.includes("CONTRATOS") && !name.includes("DICCIONARIO") && !name.includes("METADATOS");
   });
   const searchable = candidates.filter((resource) => resource.datastore_active && resource.id);
+  if (!searchable.length) {
+    throw new Error("La fuente de Datos Abiertos no tiene recursos de contratos consultables por API.");
+  }
   let records = [];
 
   for (const resource of searchable) {
@@ -266,24 +280,19 @@ async function loadContracts() {
   const attempts = [];
   const availableContracts = [];
   const sources = [];
-  const hasTwentyPerCategory = (contracts) => {
-    const counts = contracts.reduce((result, contract) => {
-      result[contract.category] += 1;
-      return result;
-    }, { Bienes: 0, Obras: 0, Servicios: 0 });
-    return Object.values(counts).every((count) => count >= CONTRACT_LIMIT);
-  };
+  let ocdsSucceeded = false;
 
   try {
     const contracts = await fetchOcdsContracts();
     availableContracts.push(...contracts);
     sources.push("OECE/OCDS");
     attempts.push({ source: "OECE/OCDS", ok: true, count: limitRecentByCategory(contracts).length });
+    ocdsSucceeded = true;
   } catch (error) {
     attempts.push({ source: "OECE/OCDS", ok: false, error: error.message });
   }
 
-  if (!hasTwentyPerCategory(limitRecentByCategory(availableContracts))) {
+  if (!ocdsSucceeded) {
     try {
       const contracts = await fetchDatasetContracts();
       availableContracts.push(...contracts);
