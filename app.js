@@ -25,10 +25,156 @@ const sourceData = {
     { id: "REQ-2026-004", contractId: "2393047", item: "Inspeccion Check C del Antonov AN-32B PNP-233", unit: "Mantenimiento Aeronautico", priority: "Media", amount: "Por confirmar", status: "Borrador", due: "12 sep", aircraft: "Antonov AN-32B · PNP-233", requester: "Cap. Luis Mendoza · Mantenimiento Aeronautico", section: "SECCIÓN DE MANTENIMIENTO PROGRAMADO", subject: "Contratacion del servicio de inspeccion de 300 horas Check C e inspecciones especiales tecnicas para el Antonov AN-32B PNP-233.", background: "La continuidad de aeronavegabilidad del Antonov AN-32B PNP-233 exige inspeccion programada y trabajos tecnicos especializados. Este requerimiento toma como referencia el objeto SEACE 2393047 visible en Contratos.", objective: "Contratar la inspeccion Check C y las inspecciones especiales tecnicas requeridas para el Antonov AN-32B.", purpose: "Conservar la aeronavegabilidad del PNP-233 con registros tecnicos completos, pruebas y conformidad del area usuaria.", specifications: ["Inspeccion de 300 horas Check C", "Inspecciones especiales tecnicas", "Personal certificado para AN-32B", "Informe tecnico y liberacion documental"], funding: "Meta 004 · Mantenimiento de aeronaves", process: "Servicios · Procedimiento competitivo", created: "01 sep 2026", responsible: "My. Ana Salazar · Oficina de Logística" },
   ],
   processes: [
-    { id: "AS-SM-1004341-2026", contractId: "1004341", title: "Grasas y lubricantes para aeronaves DIRAVPOL", method: "Adjudicacion simplificada", stage: "Consultas integradas", progress: 62, risk: "Medio" },
-    { id: "AS-SM-2422008-2026", contractId: "2422008", title: "Neumaticos para Antonov AN-32B PNP-233", method: "Adjudicacion simplificada", stage: "Bases publicadas", progress: 44, risk: "Alto" },
-    { id: "CP-2419011-2026", contractId: "2419011", title: "Suministro de combustibles de aviacion", method: "Concurso publico", stage: "Evaluacion de ofertas", progress: 78, risk: "Bajo" },
-    { id: "AS-SM-2393047-2026", contractId: "2393047", title: "Inspeccion Check C Antonov AN-32B", method: "Adjudicacion simplificada", stage: "Informe tecnico", progress: 36, risk: "Medio" },
+    {
+      id: "AS-SM-1004341-2026",
+      contractId: "1004341",
+      title: "Grasas y lubricantes para aeronaves DIRAVPOL",
+      method: "Adjudicacion simplificada",
+      stage: "Consultas integradas",
+      progress: 62,
+      risk: "Medio",
+      code: "CP-001-2025",
+      object: "Mantenimiento programado de flota MI-171",
+      requirementId: "REQ-2025-019",
+      area: "Dirección de Aviación Policial - Área de Mantenimiento",
+      contractType: "Servicio especializado",
+      procedure: "Concurso público",
+      amount: "S/ 2,420,000.00",
+      responsible: "Oficina de Logística / Contrataciones",
+      state: "Bases publicadas",
+      riskNote: "El proceso se encuentra en etapa sensible de publicación de bases. SIGECA debe controlar plazos, documentos pendientes y modificaciones del expediente.",
+      timeline: [
+        { stage: "Requerimiento", status: "Completado", date: "12/08/2026" },
+        { stage: "Indagación de mercado", status: "Completado", date: "25/08/2026" },
+        { stage: "Expediente aprobado", status: "Completado", date: "05/09/2026" },
+        { stage: "Convocatoria", status: "Completado", date: "15/09/2026" },
+        { stage: "Bases publicadas", status: "EN CURSO", date: "02/10/2026" },
+        { stage: "Consultas / observaciones", status: "Pendiente", date: "-" },
+        { stage: "Bases integradas", status: "Pendiente", date: "-" },
+        { stage: "Presentación de ofertas", status: "Pendiente", date: "-" },
+        { stage: "Buena Pro", status: "Pendiente", date: "-" },
+        { stage: "Contrato", status: "Pendiente", date: "-" },
+      ],
+      documents: [
+        { name: "Requerimiento / TDR", status: "Registrado", reference: "REQ-2025-019" },
+        { name: "Sustento técnico", status: "Registrado", reference: "Informe técnico" },
+        { name: "Indagación de mercado", status: "Registrado", reference: "Cotizaciones / análisis" },
+        { name: "Certificación presupuestal", status: "Registrado", reference: "Documento presupuestal" },
+        { name: "Bases del procedimiento", status: "Publicado", reference: "Versión vigente" },
+        { name: "Acta de consultas y observaciones", status: "Pendiente", reference: "-" },
+      ],
+      traceability: [
+        { date: "02/10/2026 09:20", action: "Bases publicadas", responsible: "Oficina de Logística", detail: "Registro de publicación" },
+        { date: "30/09/2026 15:42", action: "Expediente actualizado", responsible: "Contrataciones", detail: "Se incorporó matriz de riesgos" },
+        { date: "15/09/2026 11:05", action: "Convocatoria registrada", responsible: "Contrataciones", detail: "Proceso continúa" },
+      ],
+    },
+    {
+      id: "AS-SM-2422008-2026",
+      contractId: "2422008",
+      title: "Neumaticos para Antonov AN-32B PNP-233",
+      method: "Adjudicacion simplificada",
+      stage: "Bases publicadas",
+      progress: 44,
+      risk: "Alto",
+      code: "CP-002-2025",
+      object: "Compra de neumáticos para tren de aterrizaje del AN-32B",
+      requirementId: "REQ-2026-002",
+      area: "Abastecimiento Aeronáutico - Sección de Componentes",
+      contractType: "Bienes",
+      procedure: "Adjudicación simplificada",
+      amount: "S/ 150,851.00",
+      responsible: "Oficina de Logística / Almacén Aeronáutico",
+      state: "Bases publicadas",
+      riskNote: "El proceso presenta posible retraso por revisión técnica y coordinación con la aerona." ,
+      timeline: [
+        { stage: "Requerimiento", status: "Completado", date: "08/09/2026" },
+        { stage: "Indagación de mercado", status: "Completado", date: "12/09/2026" },
+        { stage: "Expediente aprobado", status: "Completado", date: "18/09/2026" },
+        { stage: "Bases publicadas", status: "EN CURSO", date: "25/09/2026" },
+        { stage: "Consultas / observaciones", status: "Pendiente", date: "-" },
+      ],
+      documents: [
+        { name: "Requerimiento / TDR", status: "Registrado", reference: "REQ-2026-002" },
+        { name: "Especificaciones técnicas", status: "Registrado", reference: "Ficha técnica - AN-32B" },
+        { name: "Cotizaciones", status: "Pendiente", reference: "-" },
+        { name: "Bases del procedimiento", status: "Publicado", reference: "Versión vigente" },
+      ],
+      traceability: [
+        { date: "25/09/2026 16:00", action: "Bases publicadas", responsible: "Abastecimiento", detail: "Se publicó convocatoria" },
+        { date: "24/09/2026 12:07", action: "Expediente actualizado", responsible: "Contrataciones", detail: "Se incluyó ficha técnica" },
+      ],
+    },
+    {
+      id: "CP-2419011-2026",
+      contractId: "2419011",
+      title: "Suministro de combustibles de aviacion",
+      method: "Concurso publico",
+      stage: "Evaluacion de ofertas",
+      progress: 78,
+      risk: "Bajo",
+      code: "CP-003-2025",
+      object: "Abastecimiento estratégico de combustible de aviación para bases operativas",
+      requirementId: "REQ-2026-003",
+      area: "Operaciones Aéreas - Abastecimiento",
+      contractType: "Bienes",
+      procedure: "Concurso público",
+      amount: "S/ 17,388,617.00",
+      responsible: "Oficina de Logística / Operaciones",
+      state: "Evaluación de ofertas",
+      riskNote: "El proceso sigue dentro de cronograma y con evaluación técnica en curso.",
+      timeline: [
+        { stage: "Requerimiento", status: "Completado", date: "28/08/2026" },
+        { stage: "Expediente aprobado", status: "Completado", date: "04/09/2026" },
+        { stage: "Convocatoria", status: "Completado", date: "10/09/2026" },
+        { stage: "Evaluación de ofertas", status: "EN CURSO", date: "15/09/2026" },
+        { stage: "Buena Pro", status: "Pendiente", date: "-" },
+      ],
+      documents: [
+        { name: "Requerimiento / TDR", status: "Registrado", reference: "REQ-2026-003" },
+        { name: "Especificaciones técnicas", status: "Registrado", reference: "Bases de combustibles" },
+        { name: "Ofertas", status: "Revisando", reference: "3 propuestas recibidas" },
+        { name: "Certificación presupuestal", status: "Registrado", reference: "Documento presupuestal" },
+      ],
+      traceability: [
+        { date: "15/09/2026 09:30", action: "Evaluación de ofertas", responsible: "Comité", detail: "Se recepcionaron ofertas" },
+        { date: "12/09/2026 17:45", action: "Bases publicadas", responsible: "Contrataciones", detail: "Publicación registrada" },
+      ],
+    },
+    {
+      id: "AS-SM-2393047-2026",
+      contractId: "2393047",
+      title: "Inspeccion Check C Antonov AN-32B",
+      method: "Adjudicacion simplificada",
+      stage: "Informe tecnico",
+      progress: 36,
+      risk: "Medio",
+      code: "CP-004-2025",
+      object: "Servicio de inspección mayor Check C para aeronave AN-32B",
+      requirementId: "REQ-2026-004",
+      area: "Mantenimiento Aeronáutico - Sección de Programación",
+      contractType: "Servicios",
+      procedure: "Adjudicación simplificada",
+      amount: "S/ 1,020,000.00",
+      responsible: "Oficina de Logística / Mantenimiento",
+      state: "Informe técnico",
+      riskNote: "Se requiere revisión final del informe técnico para evitar demora en la ejecución del servicio.",
+      timeline: [
+        { stage: "Requerimiento", status: "Completado", date: "01/09/2026" },
+        { stage: "Indagación de mercado", status: "Completado", date: "08/09/2026" },
+        { stage: "Informe técnico", status: "EN CURSO", date: "12/09/2026" },
+        { stage: "Adjudicación", status: "Pendiente", date: "-" },
+      ],
+      documents: [
+        { name: "Requerimiento / TDR", status: "Registrado", reference: "REQ-2026-004" },
+        { name: "Informe técnico", status: "En revisión", reference: "Checklist AN-32B" },
+        { name: "Cotizaciones", status: "Registrado", reference: "2 propuestas" },
+      ],
+      traceability: [
+        { date: "12/09/2026 08:10", action: "Informe técnico", responsible: "Mantenimiento", detail: "Se adjuntó revisión preliminar" },
+        { date: "09/09/2026 13:25", action: "Cotizaciones", responsible: "Contrataciones", detail: "Se actualizaron precios" },
+      ],
+    },
   ],
   suppliers: [
     { name: "AeroAndes SAC", specialty: "Mantenimiento mayor", score: 94, docs: "Vigente", sanctions: "Sin sanciones" },
@@ -107,6 +253,7 @@ createApp({
       query: "",
       status: "Todos",
       selectedRequirementId: null,
+      selectedProcessId: null,
       sidebarOpen: false,
       toastMessage: "",
       toastVisible: false,
@@ -136,6 +283,9 @@ createApp({
     selectedRequirement() {
       return this.data.requirements.find((item) => item.id === this.selectedRequirementId) || null;
     },
+    selectedProcess() {
+      return this.data.processes.find((item) => item.id === this.selectedProcessId) || null;
+    },
     selectedReportNumber() {
       return this.selectedRequirement?.id.replace(/^REQ-\d{4}-/, "") || "";
     },
@@ -162,6 +312,7 @@ createApp({
     setView(view) {
       this.currentView = view;
       this.selectedRequirementId = null;
+      this.selectedProcessId = null;
       this.query = "";
       this.status = "Todos";
       this.sidebarOpen = false;
@@ -223,7 +374,16 @@ createApp({
     backToRequirements() {
       this.selectedRequirementId = null;
     },
+    openProcess(id) {
+      this.selectedProcessId = id;
+    },
+    backToProcesses() {
+      this.selectedProcessId = null;
+    },
     printRequirement() {
+      window.print();
+    },
+    printProcess() {
       window.print();
     },
     clearSyncSearch() {
@@ -467,13 +627,55 @@ createApp({
             </template>
 
             <template v-else-if="currentView === 'procesos'">
-              <module-header title="Procesos de seleccion" lead="Seguimiento del ciclo de contratacion, desde actuaciones preparatorias hasta buena pro, con control de plazos y riesgos." :stats="[{ value: data.processes.length, label: 'procesos activos' }, { value: '1', label: 'riesgo alto' }, { value: '62%', label: 'avance promedio' }, { value: '3', label: 'hitos proximos' }]" />
-              <section class="panel">
-                <div class="toolbar"><input class="search" v-model="query" type="search" placeholder="Buscar proceso, referencia SEACE, objeto o etapa..."><div class="filters"><select class="select" v-model="status"><option>Todos</option><option>Bajo</option><option>Medio</option><option>Alto</option></select><button class="btn" @click="handleAction('new')">Nuevo registro</button></div></div>
-                <div class="table-wrap"><table><thead><tr><th>Proceso</th><th>Ref. SEACE</th><th>Objeto</th><th>Metodo</th><th>Etapa</th><th>Riesgo</th><th>Acciones</th></tr></thead><tbody>
-                  <tr v-for="item in filteredProcesses" :key="item.id"><td><b>{{ item.id }}</b></td><td><span class="tag">{{ item.contractId }}</span></td><td>{{ item.title }}</td><td>{{ item.method }}</td><td>{{ item.stage }}<div class="progress"><span :style="{ width: item.progress + '%' }"></span></div></td><td><span class="status" :class="statusClass(item.risk)">{{ item.risk }}</span></td><td class="actions"><button class="mini" @click="handleAction('open')">Ver</button><button class="mini" @click="handleAction('timeline')">Hitos</button></td></tr>
-                </tbody></table></div>
-              </section>
+              <template v-if="selectedProcess">
+                <section class="requirement-toolbar">
+                  <button class="btn" @click="backToProcesses">← Volver a procesos</button>
+                  <div><span class="document-state"><i></i> Ficha de seguimiento · Datos ficticios</span><button class="btn primary" @click="printProcess">Imprimir / Guardar PDF</button></div>
+                </section>
+                <article class="requirement-sheet">
+                  <header class="document-header">
+                    <div class="document-brand"><img class="document-crest" src="assets/DIVMAAER.svg" alt="Escudo de la División de Mantenimiento Aeropolicial"><div><b>POLICÍA NACIONAL DEL PERÚ</b><span>DIRECCIÓN DE AVIACIÓN POLICIAL - SIGECA</span><span>FICHA DE SEGUIMIENTO DEL PROCESO DE CONTRATACIÓN</span></div></div>
+                  </header>
+                  <div class="report-title"><h1>{{ selectedProcess.code }}</h1><div class="report-reference"><span>{{ selectedProcess.procedure }}</span><span class="status" :class="statusClass(selectedProcess.risk)">{{ selectedProcess.risk }}</span></div></div>
+                  <div class="document-object"><span>Objeto de contratación</span><h2>{{ selectedProcess.object }}</h2><p>{{ selectedProcess.method }} · {{ selectedProcess.state }}</p></div>
+                  <section class="document-section"><h3><span>1</span> DATOS GENERALES</h3><div class="document-fields">
+                    <div><label>Objeto de contratación</label><b>{{ selectedProcess.object }}</b></div>
+                    <div><label>Requerimiento de origen</label><b>{{ selectedProcess.requirementId }}</b></div>
+                    <div><label>Área usuaria</label><b>{{ selectedProcess.area }}</b></div>
+                    <div><label>Tipo de contratación</label><b>{{ selectedProcess.contractType }}</b></div>
+                    <div><label>Procedimiento</label><b>{{ selectedProcess.procedure }}</b></div>
+                    <div><label>Monto estimado</label><b class="document-amount">{{ selectedProcess.amount }}</b></div>
+                    <div><label>Responsable del seguimiento</label><b>{{ selectedProcess.responsible }}</b></div>
+                    <div><label>Estado actual</label><b>{{ selectedProcess.state }}</b></div>
+                  </div></section>
+                  <section class="document-section"><h3><span>2</span> AVANCE DEL PROCESO</h3>
+                    <div class="table-wrap"><table><thead><tr><th>#</th><th>Etapa</th><th>Situación</th><th>Fecha</th></tr></thead><tbody>
+                      <tr v-for="(step, index) in selectedProcess.timeline" :key="step.stage"><td>{{ index + 1 }}</td><td>{{ step.stage }}</td><td><span class="status" :class="step.status === 'EN CURSO' ? 'warn' : step.status === 'Completado' ? 'ok' : step.status === 'Pendiente' ? 'info' : 'info'">{{ step.status }}</span></td><td>{{ step.date }}</td></tr>
+                    </tbody></table></div>
+                  </section>
+                  <section class="document-section"><h3><span>3</span> DOCUMENTOS DEL EXPEDIENTE</h3>
+                    <div class="table-wrap"><table><thead><tr><th>Documento</th><th>Estado</th><th>Referencia</th></tr></thead><tbody>
+                      <tr v-for="doc in selectedProcess.documents" :key="doc.name"><td>{{ doc.name }}</td><td><span class="status" :class="doc.status === 'Publicado' || doc.status === 'Registrado' ? 'ok' : doc.status === 'En revisión' || doc.status === 'Revisando' ? 'warn' : 'info'">{{ doc.status }}</span></td><td>{{ doc.reference }}</td></tr>
+                    </tbody></table></div>
+                  </section>
+                  <section class="document-section"><h3><span>4</span> ALERTAS Y RIESGOS</h3><p>{{ selectedProcess.riskNote }}</p></section>
+                  <section class="document-section"><h3><span>5</span> TRAZABILIDAD</h3>
+                    <div class="table-wrap"><table><thead><tr><th>Fecha / hora</th><th>Acción</th><th>Responsable</th><th>Detalle</th></tr></thead><tbody>
+                      <tr v-for="item in selectedProcess.traceability" :key="item.date + item.action"><td>{{ item.date }}</td><td>{{ item.action }}</td><td>{{ item.responsible }}</td><td>{{ item.detail }}</td></tr>
+                    </tbody></table></div>
+                  </section>
+                  <footer class="document-footer"><span>DIRAVPOL PNP · Unidad Ejecutora N.º 18</span><span>Ficha demostrativa SIGECA</span><span>{{ selectedProcess.state }}</span></footer>
+                </article>
+              </template>
+              <template v-else>
+                <module-header title="Procesos de seleccion" lead="Seguimiento del ciclo de contratacion, desde actuaciones preparatorias hasta buena pro, con control de plazos y riesgos." :stats="[{ value: data.processes.length, label: 'procesos activos' }, { value: '1', label: 'riesgo alto' }, { value: '62%', label: 'avance promedio' }, { value: '3', label: 'hitos proximos' }]" />
+                <section class="panel">
+                  <div class="toolbar"><input class="search" v-model="query" type="search" placeholder="Buscar proceso, referencia SEACE, objeto o etapa..."><div class="filters"><select class="select" v-model="status"><option>Todos</option><option>Bajo</option><option>Medio</option><option>Alto</option></select><button class="btn" @click="handleAction('new')">Nuevo registro</button></div></div>
+                  <div class="table-wrap"><table><thead><tr><th>Proceso</th><th>Ref. SEACE</th><th>Objeto</th><th>Metodo</th><th>Etapa</th><th>Riesgo</th><th>Acciones</th></tr></thead><tbody>
+                    <tr v-for="item in filteredProcesses" :key="item.id"><td><b>{{ item.id }}</b></td><td><span class="tag">{{ item.contractId }}</span></td><td>{{ item.title }}</td><td>{{ item.method }}</td><td>{{ item.stage }}<div class="progress"><span :style="{ width: item.progress + '%' }"></span></div></td><td><span class="status" :class="statusClass(item.risk)">{{ item.risk }}</span></td><td class="actions"><button class="mini" @click="openProcess(item.id)">Ver</button><button class="mini" @click="handleAction('timeline')">Hitos</button></td></tr>
+                  </tbody></table></div>
+                </section>
+              </template>
             </template>
 
             <template v-else-if="currentView === 'contratos'">
