@@ -19,15 +19,16 @@ const CONTRACTS_URL = window.location.port === "4173" ? "/api/contracts" : "cont
 
 const sourceData = {
   requirements: [
-    { id: "REQ-2025-018", item: "Inspeccion mayor Bell 412 EP", unit: "Mantenimiento Aeronautico", priority: "Alta", amount: "S/ 1,280,000", status: "En evaluacion", due: "26 feb", aircraft: "Bell 412 EP · PNP-501", requester: "Cap. Luis Mendoza · Mantenimiento Aeronautico", section: "SECCIÓN DE MANTENIMIENTO PROGRAMADO", subject: "Sustento para contratar la inspeccion mayor programada de la aeronave Bell 412 EP, matricula PNP-501.", background: "La aeronave Bell 412 EP PNP-501 se encuentra próxima al hito de inspección mayor establecido en su programa de mantenimiento. La intervención requiere personal especializado, evaluación integral de sistemas y registro de los trabajos para conservar su condición de aeronavegabilidad.", objective: "Contratar la ejecución de la inspección mayor de la aeronave, de acuerdo con los manuales vigentes del fabricante y el alcance técnico aprobado por el área usuaria.", purpose: "Restablecer y preservar la disponibilidad operacional del Bell 412 EP, dejando evidencia documentada de las inspecciones, discrepancias atendidas y liberación al servicio.", specifications: ["Inspección estructural y de sistemas conforme al manual del fabricante", "Evaluación de componentes y registro de discrepancias", "Personal técnico con certificación vigente para Bell 412 EP", "Informe técnico, trazabilidad de trabajos y garantía del servicio"], funding: "Meta 004 · Mantenimiento de aeronaves", process: "Servicio especializado · Procedimiento competitivo", created: "12 feb 2025", responsible: "My. Ana Salazar · Oficina de Logística" },
-    { id: "REQ-2025-019", item: "Repuestos tren de aterrizaje", unit: "Escuadron de Helicopteros", priority: "Critica", amount: "S/ 540,000", status: "Observado", due: "28 feb", aircraft: "MI-171Sh · PNP-512", requester: "Tte. Crnl. Jorge Rivas · Escuadron de Helicopteros", section: "SECCIÓN DE COMPONENTES Y ESTRUCTURAS", subject: "Adquisición de repuestos para el tren de aterrizaje del helicóptero MI-171Sh PNP-512.", background: "Durante la inspección técnica del MI-171Sh PNP-512 se identificó la necesidad de reemplazar componentes del tren de aterrizaje. La falta de estos repuestos condiciona la recuperación de la aeronave y exige verificar compatibilidad, procedencia y documentación de aeronavegabilidad antes de su instalación.", objective: "Adquirir los componentes requeridos para el tren de aterrizaje, compatibles con el modelo y la configuración de la aeronave, con documentación de origen y trazabilidad.", purpose: "Permitir la reparación controlada del MI-171Sh PNP-512 y contribuir a recuperar su disponibilidad para las operaciones aeropoliciales.", specifications: ["Componentes nuevos y compatibles con modelo y número de serie", "Trazabilidad y documentación de origen del fabricante", "Certificados de aeronavegabilidad y conformidad aplicables", "Garantía y soporte técnico para la instalación"], funding: "Meta 004 · Repuestos y componentes", process: "Bienes · Procedimiento competitivo", created: "14 feb 2025", responsible: "My. Ana Salazar · Oficina de Logística" },
-    { id: "REQ-2025-020", item: "Servicio overhaul motor PT6T", unit: "Aeronaves de ala rotatoria", priority: "Alta", amount: "S/ 2,420,000", status: "Aprobado", due: "05 mar", aircraft: "Bell 412 EP · PNP-508", requester: "Cap. Luis Mendoza · Mantenimiento Aeronautico", section: "SECCIÓN DE MOTORES Y PLANTAS MOTRICES", subject: "Contratación del servicio de overhaul del motor PT6T asignado a la aeronave Bell 412 EP PNP-508.", background: "El motor PT6T de la aeronave Bell 412 EP PNP-508 requiere una intervención mayor conforme a sus parámetros de uso y al programa de mantenimiento. El servicio debe ser ejecutado por un taller con capacidad acreditada y dejar constancia de las pruebas y componentes intervenidos.", objective: "Contratar el overhaul del motor PT6T según las instrucciones vigentes del fabricante, incluyendo evaluación, reparación, pruebas y documentación técnica de retorno al servicio.", purpose: "Recuperar los parámetros de funcionamiento del motor y extender su ciclo de operación segura, con historial y garantía verificables.", specifications: ["Overhaul conforme a instrucciones vigentes del fabricante", "Repuestos con certificados de conformidad y trazabilidad", "Pruebas de banco y protocolo de liberación al servicio", "Informe de trabajos, garantía y soporte posservicio"], funding: "Meta 004 · Mantenimiento de aeronaves", process: "Servicio especializado · Procedimiento competitivo", created: "17 feb 2025", responsible: "My. Ana Salazar · Oficina de Logística" },
-    { id: "REQ-2025-021", item: "Baterias aeronauticas certificadas", unit: "Abastecimiento", priority: "Media", amount: "S/ 132,000", status: "Borrador", due: "10 mar", aircraft: "Cessna 208B · PNP-320", requester: "S1 PNP Marco Vega · Abastecimiento", section: "SECCIÓN DE AVIÓNICA Y SISTEMA ELÉCTRICO", subject: "Adquisición de baterías aeronáuticas certificadas para la aeronave Cessna 208B PNP-320.", background: "Las baterías instaladas en la aeronave Cessna 208B PNP-320 se aproximan al límite de servicio previsto. Su reemplazo debe considerar compatibilidad con la configuración de la aeronave, fecha de fabricación, documentación técnica y garantía del proveedor.", objective: "Adquirir baterías nuevas que cumplan las especificaciones del fabricante y sean compatibles con el modelo y configuración de la aeronave.", purpose: "Asegurar la disponibilidad del sistema eléctrico para el arranque y la operación de la aeronave, con componentes identificables y documentación verificable.", specifications: ["Baterías nuevas compatibles con modelo y configuración", "Fecha de fabricación vigente y ficha técnica", "Certificado de conformidad y documentación de origen", "Garantía mínima de doce meses"], funding: "Meta 004 · Repuestos y componentes", process: "Bienes · Procedimiento competitivo", created: "20 feb 2025", responsible: "My. Ana Salazar · Oficina de Logística" },
+    { id: "REQ-2026-001", contractId: "1004341", item: "Grasas y lubricantes para mantenimiento e inspeccion", unit: "Mantenimiento Aeronautico", priority: "Alta", amount: "S/ 199,046", status: "En evaluacion", due: "24 sep", aircraft: "Flota DIRAVPOL PNP", requester: "Cap. Luis Mendoza · Mantenimiento Aeronautico", section: "SECCIÓN DE MANTENIMIENTO PROGRAMADO", subject: "Sustento para la adquisicion de grasas y lubricantes para mantenimiento e inspeccion de las aeronaves DIRAVPOL PNP.", background: "La programacion de inspecciones de la flota DIRAVPOL requiere grasas y lubricantes de uso aeronautico compatibles con los manuales tecnicos aplicables. Este requerimiento toma como referencia el objeto SEACE 1004341 registrado en la pestaña Contratos.", objective: "Adquirir grasas y lubricantes certificados para asegurar la continuidad del mantenimiento preventivo y correctivo de las aeronaves DIRAVPOL.", purpose: "Mantener la disponibilidad operacional de la flota con insumos trazables, especificaciones tecnicas verificables y registro documental para auditoria.", specifications: ["Grasas y lubricantes de uso aeronautico", "Compatibilidad con manuales tecnicos de aeronaves DIRAVPOL", "Certificado de calidad y trazabilidad de lote", "Entrega documentada para almacen aeronautico"], funding: "Meta 004 · Mantenimiento de aeronaves", process: "Bienes · Procedimiento competitivo", created: "10 sep 2026", responsible: "My. Ana Salazar · Oficina de Logística" },
+    { id: "REQ-2026-002", contractId: "2422008", item: "Neumaticos para avion Antonov AN-32B PNP-233", unit: "Abastecimiento Aeronautico", priority: "Critica", amount: "S/ 150,851", status: "Observado", due: "13 sep", aircraft: "Antonov AN-32B · PNP-233", requester: "Tte. Crnl. Jorge Rivas · Abastecimiento Aeronautico", section: "SECCIÓN DE COMPONENTES Y ESTRUCTURAS", subject: "Adquisicion de neumaticos para el avion Antonov, modelo AN-32B, matricula PNP-233.", background: "El avion Antonov AN-32B PNP-233 requiere neumaticos compatibles para sostener sus operaciones y cumplir condiciones de aeronavegabilidad. Este expediente se vincula con el objeto SEACE 2422008 listado en Contratos.", objective: "Adquirir neumaticos aeronauticos compatibles con el Antonov AN-32B, con documentacion de origen, garantia y trazabilidad.", purpose: "Permitir la operacion segura del PNP-233 y reducir riesgos de indisponibilidad por componentes de tren de aterrizaje.", specifications: ["Neumaticos compatibles con Antonov AN-32B", "Documentacion de procedencia y conformidad", "Fecha de fabricacion vigente", "Garantia y ficha tecnica del fabricante"], funding: "Meta 004 · Repuestos y componentes", process: "Bienes · Procedimiento competitivo", created: "08 sep 2026", responsible: "My. Ana Salazar · Oficina de Logística" },
+    { id: "REQ-2026-003", contractId: "2419011", item: "Suministro de combustibles de aviacion", unit: "Operaciones Aereas", priority: "Alta", amount: "S/ 17,388,617", status: "Aprobado", due: "03 sep", aircraft: "Bases Lima, Iquitos, Cusco, Talara y El Milagro", requester: "Cmdte. Raul Castro · Operaciones Aereas", section: "SECCIÓN DE ABASTECIMIENTO DE COMBUSTIBLE", subject: "Contratacion del suministro de combustibles de aviacion en aeropuertos y plantas requeridas por DIRAVPOL.", background: "Las operaciones aeropoliciales requieren abastecimiento continuo de combustible de aviacion en Lima-Callao, Iquitos, Cusco y plantas estrategicas. El expediente referencia el objeto SEACE 2419011 de la pestaña Contratos.", objective: "Contratar el suministro de combustibles de aviacion para asegurar continuidad operativa en bases y destacamentos aereos.", purpose: "Garantizar disponibilidad de combustible certificado, control de consumos y soporte logistico a operaciones policiales.", specifications: ["Combustible de aviacion segun norma aplicable", "Atencion en aeropuertos y plantas indicadas", "Control documentario de despachos", "Trazabilidad de calidad y volumen entregado"], funding: "Meta 006 · Operaciones aeropoliciales", process: "Bienes · Concurso publico", created: "28 ago 2026", responsible: "My. Ana Salazar · Oficina de Logística" },
+    { id: "REQ-2026-004", contractId: "2393047", item: "Inspeccion Check C del Antonov AN-32B PNP-233", unit: "Mantenimiento Aeronautico", priority: "Media", amount: "Por confirmar", status: "Borrador", due: "12 sep", aircraft: "Antonov AN-32B · PNP-233", requester: "Cap. Luis Mendoza · Mantenimiento Aeronautico", section: "SECCIÓN DE MANTENIMIENTO PROGRAMADO", subject: "Contratacion del servicio de inspeccion de 300 horas Check C e inspecciones especiales tecnicas para el Antonov AN-32B PNP-233.", background: "La continuidad de aeronavegabilidad del Antonov AN-32B PNP-233 exige inspeccion programada y trabajos tecnicos especializados. Este requerimiento toma como referencia el objeto SEACE 2393047 visible en Contratos.", objective: "Contratar la inspeccion Check C y las inspecciones especiales tecnicas requeridas para el Antonov AN-32B.", purpose: "Conservar la aeronavegabilidad del PNP-233 con registros tecnicos completos, pruebas y conformidad del area usuaria.", specifications: ["Inspeccion de 300 horas Check C", "Inspecciones especiales tecnicas", "Personal certificado para AN-32B", "Informe tecnico y liberacion documental"], funding: "Meta 004 · Mantenimiento de aeronaves", process: "Servicios · Procedimiento competitivo", created: "01 sep 2026", responsible: "My. Ana Salazar · Oficina de Logística" },
   ],
   processes: [
-    { id: "AS-SM-004-2025", title: "Adquisicion de componentes avionicos", method: "Adjudicacion simplificada", stage: "Consultas integradas", progress: 62, risk: "Medio" },
-    { id: "CP-001-2025", title: "Mantenimiento programado flota MI-171", method: "Concurso publico", stage: "Bases publicadas", progress: 44, risk: "Alto" },
-    { id: "DIRECTA-002-2025", title: "Servicio tecnico por proveedor exclusivo", method: "Contratacion directa", stage: "Informe tecnico", progress: 78, risk: "Bajo" },
+    { id: "AS-SM-1004341-2026", contractId: "1004341", title: "Grasas y lubricantes para aeronaves DIRAVPOL", method: "Adjudicacion simplificada", stage: "Consultas integradas", progress: 62, risk: "Medio" },
+    { id: "AS-SM-2422008-2026", contractId: "2422008", title: "Neumaticos para Antonov AN-32B PNP-233", method: "Adjudicacion simplificada", stage: "Bases publicadas", progress: 44, risk: "Alto" },
+    { id: "CP-2419011-2026", contractId: "2419011", title: "Suministro de combustibles de aviacion", method: "Concurso publico", stage: "Evaluacion de ofertas", progress: 78, risk: "Bajo" },
+    { id: "AS-SM-2393047-2026", contractId: "2393047", title: "Inspeccion Check C Antonov AN-32B", method: "Adjudicacion simplificada", stage: "Informe tecnico", progress: 36, risk: "Medio" },
   ],
   suppliers: [
     { name: "AeroAndes SAC", specialty: "Mantenimiento mayor", score: 94, docs: "Vigente", sanctions: "Sin sanciones" },
@@ -139,10 +140,10 @@ createApp({
       return this.selectedRequirement?.id.replace(/^REQ-\d{4}-/, "") || "";
     },
     filteredRequirements() {
-      return this.data.requirements.filter((item) => this.matchesQuery([item.id, item.item, item.unit, item.priority]) && this.matchesStatus(item.status));
+      return this.data.requirements.filter((item) => this.matchesQuery([item.id, item.contractId, item.item, item.unit, item.priority]) && this.matchesStatus(item.status));
     },
     filteredProcesses() {
-      return this.data.processes.filter((item) => this.matchesQuery([item.id, item.title, item.method, item.stage]) && this.matchesStatus(item.risk));
+      return this.data.processes.filter((item) => this.matchesQuery([item.id, item.contractId, item.title, item.method, item.stage]) && this.matchesStatus(item.risk));
     },
     filteredSuppliers() {
       return this.data.suppliers.filter((item) => this.matchesQuery([item.name, item.specialty, item.docs, item.sanctions]) && this.matchesStatus(item.docs));
@@ -197,9 +198,13 @@ createApp({
       return "ok";
     },
     handleAction(action) {
+      if (action === "sync") {
+        this.syncContractsFromSeace();
+        return;
+      }
+
       const messages = {
         generate: "Reporte ejecutivo generado para revision.",
-        sync: "Datos sincronizados con el tablero del prototipo.",
         new: "Formulario de nuevo registro preparado.",
         open: "Ficha abierta en modo consulta.",
         approve: "Requerimiento marcado para validacion tecnica.",
@@ -226,11 +231,20 @@ createApp({
       this.status = "Todos";
       this.handleAction("sync-clear");
     },
+    formatSyncTimestamp(date = new Date()) {
+      return new Intl.DateTimeFormat("es-PE", {
+        dateStyle: "short",
+        timeStyle: "medium",
+      }).format(date);
+    },
     async syncContractsFromSeace() {
+      const requestedAt = this.formatSyncTimestamp();
+
       this.contractSync = {
         ...this.contractSync,
         status: "loading",
         message: "Sincronizando con las fuentes oficiales: hasta 20 contratos recientes por categoría...",
+        lastSync: requestedAt,
       };
 
       try {
@@ -258,7 +272,7 @@ createApp({
           message: contracts.length
             ? `Consulta completada desde ${result.source}: ${counts.Bienes} bienes, ${counts.Obras} obras y ${counts.Servicios} servicios. Se muestran como máximo 20 por categoría.`
             : result.message || "No se encontraron contratos clasificables de DIRAVPOL en las fuentes oficiales.",
-          lastSync: result.lastSync,
+          lastSync: requestedAt,
           sourceUrl: result.sourceUrl,
           attempts: result.attempts || [],
         };
@@ -272,7 +286,7 @@ createApp({
         this.contractSync = {
           status: "error",
           message: `No se pudo sincronizar desde las fuentes oficiales: ${message}. No se muestran registros de respaldo para evitar confundirlos con contratos reales.`,
-          lastSync: null,
+          lastSync: requestedAt,
           sourceUrl: error.result?.sourceUrl || SEACE_SOURCE.datasetUrl,
           attempts: error.result?.attempts || [],
         };
@@ -412,7 +426,8 @@ createApp({
                   <section class="report-section"><h2>1. OBJETIVO</h2><p>{{ selectedRequirement.objective }}</p></section>
                   <section class="report-section"><h2>2. FINALIDAD</h2><p>{{ selectedRequirement.purpose }}</p></section>
                   <section class="document-section"><h3>3. IDENTIFICACIÓN DEL REQUERIMIENTO</h3><div class="document-fields">
-                    <div><label>Código del requerimiento</label><b>{{ selectedRequirement.id }}</b></div><div><label>Unidad usuaria</label><b>{{ selectedRequirement.unit }}</b></div>
+                    <div><label>Código del requerimiento</label><b>{{ selectedRequirement.id }}</b></div><div><label>Referencia SEACE</label><b>{{ selectedRequirement.contractId }}</b></div>
+                    <div><label>Unidad usuaria</label><b>{{ selectedRequirement.unit }}</b></div>
                     <div><label>Área solicitante</label><b>{{ selectedRequirement.requester }}</b></div><div><label>Responsable de seguimiento</label><b>{{ selectedRequirement.responsible }}</b></div>
                     <div><label>Aeronave relacionada</label><b>{{ selectedRequirement.aircraft }}</b></div><div><label>Fecha de registro</label><b>{{ selectedRequirement.created }}</b></div>
                   </div></section>
@@ -438,12 +453,12 @@ createApp({
                 />
                 <section class="panel">
                   <div class="toolbar">
-                    <input class="search" v-model="query" type="search" placeholder="Buscar por codigo, bien, servicio o unidad...">
+                    <input class="search" v-model="query" type="search" placeholder="Buscar por codigo, referencia SEACE, bien, servicio o unidad...">
                     <div class="filters"><select class="select" v-model="status"><option>Todos</option><option>Borrador</option><option>En evaluacion</option><option>Aprobado</option><option>Observado</option></select><button class="btn" @click="handleAction('new')">Nuevo registro</button></div>
                   </div>
-                  <div class="table-wrap"><table><thead><tr><th>Codigo</th><th>Objeto</th><th>Unidad</th><th>Monto</th><th>Estado</th><th>Vence</th><th>Acciones</th></tr></thead><tbody>
+                  <div class="table-wrap"><table><thead><tr><th>Codigo</th><th>Ref. SEACE</th><th>Objeto</th><th>Unidad</th><th>Monto</th><th>Estado</th><th>Vence</th><th>Acciones</th></tr></thead><tbody>
                     <tr v-for="item in filteredRequirements" :key="item.id">
-                      <td><b>{{ item.id }}</b><br><span class="tag">{{ item.priority }}</span></td><td>{{ item.item }}</td><td>{{ item.unit }}</td><td>{{ item.amount }}</td><td><span class="status" :class="statusClass(item.status)">{{ item.status }}</span></td><td>{{ item.due }}</td>
+                      <td><b>{{ item.id }}</b><br><span class="tag">{{ item.priority }}</span></td><td><span class="tag">{{ item.contractId }}</span></td><td>{{ item.item }}</td><td>{{ item.unit }}</td><td>{{ item.amount }}</td><td><span class="status" :class="statusClass(item.status)">{{ item.status }}</span></td><td>{{ item.due }}</td>
                       <td class="actions"><button class="mini" @click="openRequirement(item.id)">Abrir</button><button class="mini" @click="handleAction('approve')">Validar</button></td>
                     </tr>
                   </tbody></table></div>
@@ -454,9 +469,9 @@ createApp({
             <template v-else-if="currentView === 'procesos'">
               <module-header title="Procesos de seleccion" lead="Seguimiento del ciclo de contratacion, desde actuaciones preparatorias hasta buena pro, con control de plazos y riesgos." :stats="[{ value: data.processes.length, label: 'procesos activos' }, { value: '1', label: 'riesgo alto' }, { value: '62%', label: 'avance promedio' }, { value: '3', label: 'hitos proximos' }]" />
               <section class="panel">
-                <div class="toolbar"><input class="search" v-model="query" type="search" placeholder="Buscar proceso, objeto o etapa..."><div class="filters"><select class="select" v-model="status"><option>Todos</option><option>Bajo</option><option>Medio</option><option>Alto</option></select><button class="btn" @click="handleAction('new')">Nuevo registro</button></div></div>
-                <div class="table-wrap"><table><thead><tr><th>Proceso</th><th>Objeto</th><th>Metodo</th><th>Etapa</th><th>Riesgo</th><th>Acciones</th></tr></thead><tbody>
-                  <tr v-for="item in filteredProcesses" :key="item.id"><td><b>{{ item.id }}</b></td><td>{{ item.title }}</td><td>{{ item.method }}</td><td>{{ item.stage }}<div class="progress"><span :style="{ width: item.progress + '%' }"></span></div></td><td><span class="status" :class="statusClass(item.risk)">{{ item.risk }}</span></td><td class="actions"><button class="mini" @click="handleAction('open')">Ver</button><button class="mini" @click="handleAction('timeline')">Hitos</button></td></tr>
+                <div class="toolbar"><input class="search" v-model="query" type="search" placeholder="Buscar proceso, referencia SEACE, objeto o etapa..."><div class="filters"><select class="select" v-model="status"><option>Todos</option><option>Bajo</option><option>Medio</option><option>Alto</option></select><button class="btn" @click="handleAction('new')">Nuevo registro</button></div></div>
+                <div class="table-wrap"><table><thead><tr><th>Proceso</th><th>Ref. SEACE</th><th>Objeto</th><th>Metodo</th><th>Etapa</th><th>Riesgo</th><th>Acciones</th></tr></thead><tbody>
+                  <tr v-for="item in filteredProcesses" :key="item.id"><td><b>{{ item.id }}</b></td><td><span class="tag">{{ item.contractId }}</span></td><td>{{ item.title }}</td><td>{{ item.method }}</td><td>{{ item.stage }}<div class="progress"><span :style="{ width: item.progress + '%' }"></span></div></td><td><span class="status" :class="statusClass(item.risk)">{{ item.risk }}</span></td><td class="actions"><button class="mini" @click="handleAction('open')">Ver</button><button class="mini" @click="handleAction('timeline')">Hitos</button></td></tr>
                 </tbody></table></div>
               </section>
             </template>
@@ -487,7 +502,7 @@ createApp({
                     </div>
                     <div class="source-links">
                       <a :href="contractSync.sourceUrl || SEACE_SOURCE.datasetUrl" target="_blank" rel="noreferrer">Fuente consultada</a>
-                      <a :href="SEACE_SOURCE.ocdsUrl" target="_blank" rel="noreferrer">Portal de Contrataciones Abiertas</a>
+                      <a :href="SEACE_SOURCE.ocdsUrl" target="_blank" rel="noreferrer">Portal de Contrataciones SEACE</a>
                     </div>
                   </div>
                 </div>
