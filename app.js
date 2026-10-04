@@ -177,10 +177,118 @@ const sourceData = {
     },
   ],
   suppliers: [
-    { name: "AeroAndes SAC", specialty: "Mantenimiento mayor", score: 94, docs: "Vigente", sanctions: "Sin sanciones" },
-    { name: "HeliParts Peru", specialty: "Repuestos aeronauticos", score: 86, docs: "Por renovar", sanctions: "Sin sanciones" },
-    { name: "TecnoAvionics", specialty: "Avionica y calibracion", score: 90, docs: "Vigente", sanctions: "Sin sanciones" },
-    { name: "Rotor Service LATAM", specialty: "Componentes dinamicos", score: 72, docs: "Incompleto", sanctions: "Revision requerida" },
+    {
+      name: "AeroAndes SAC",
+      ruc: "20548796321",
+      specialty: "Mantenimiento mayor",
+      score: 94,
+      docs: "Vigente",
+      sanctions: "Sin sanciones",
+      representative: "Ing. Marco Salvatierra",
+      address: "Av. Elmer Faucett 3460, Callao",
+      phone: "+51 1 614-2300",
+      email: "contratos@aeroandes.pe",
+      registry: "REG-PROV-2026-001",
+      validity: "31/12/2026",
+      experience: "12 anos en servicios de mantenimiento aeronautico mayor",
+      category: "Servicios especializados",
+      certifications: ["DGAC - Organizacion de mantenimiento autorizada", "ISO 9001:2015", "Personal tecnico habilitado"],
+      documents: [
+        { name: "RNP / OSCE", status: "Vigente", reference: "Constancia 2026" },
+        { name: "Ficha RUC", status: "Vigente", reference: "SUNAT activo y habido" },
+        { name: "Declaracion jurada anticorrupcion", status: "Registrado", reference: "DJ-2026-001" },
+        { name: "Certificados tecnicos", status: "Vigente", reference: "DGAC / fabricante" },
+      ],
+      contracts: [
+        { object: "Inspeccion programada de flota MI-171", amount: "S/ 2,420,000.00", year: "2025", result: "Conforme" },
+        { object: "Soporte tecnico de mantenimiento mayor", amount: "S/ 890,000.00", year: "2024", result: "Conforme" },
+      ],
+      observations: "Proveedor con historial favorable y documentacion tecnica completa para servicios de mantenimiento mayor.",
+    },
+    {
+      name: "HeliParts Peru",
+      ruc: "20601478596",
+      specialty: "Repuestos aeronauticos",
+      score: 86,
+      docs: "Por renovar",
+      sanctions: "Sin sanciones",
+      representative: "Lic. Paola Herrera",
+      address: "Jr. Los Halcones 245, San Isidro, Lima",
+      phone: "+51 1 441-9820",
+      email: "licitaciones@heliparts.pe",
+      registry: "REG-PROV-2026-002",
+      validity: "15/10/2026",
+      experience: "8 anos suministrando componentes y consumibles aeronauticos",
+      category: "Bienes aeronauticos",
+      certifications: ["Carta de distribuidor autorizado", "Trazabilidad de lote", "Garantia de fabricante"],
+      documents: [
+        { name: "RNP / OSCE", status: "Vigente", reference: "Constancia 2026" },
+        { name: "Ficha RUC", status: "Vigente", reference: "SUNAT activo y habido" },
+        { name: "Carta de distribuidor", status: "Por renovar", reference: "Vence en octubre" },
+        { name: "Declaracion jurada anticorrupcion", status: "Registrado", reference: "DJ-2026-002" },
+      ],
+      contracts: [
+        { object: "Suministro de filtros y sellos hidraulicos", amount: "S/ 410,000.00", year: "2025", result: "Conforme" },
+        { object: "Repuestos para Bell 412", amount: "S/ 275,000.00", year: "2024", result: "Conforme" },
+      ],
+      observations: "Requiere actualizar carta de distribuidor autorizado antes de nuevas adjudicaciones sensibles.",
+    },
+    {
+      name: "TecnoAvionics",
+      ruc: "20596321478",
+      specialty: "Avionica y calibracion",
+      score: 90,
+      docs: "Vigente",
+      sanctions: "Sin sanciones",
+      representative: "Ing. Valeria Nunez",
+      address: "Av. Guardia Chalaca 1320, Callao",
+      phone: "+51 1 465-7781",
+      email: "comercial@tecnoavionics.pe",
+      registry: "REG-PROV-2026-003",
+      validity: "30/11/2026",
+      experience: "10 anos en calibracion, avionica y bancos de prueba",
+      category: "Servicios especializados",
+      certifications: ["Laboratorio de calibracion acreditado", "ISO 9001:2015", "Trazabilidad metrologica"],
+      documents: [
+        { name: "RNP / OSCE", status: "Vigente", reference: "Constancia 2026" },
+        { name: "Ficha RUC", status: "Vigente", reference: "SUNAT activo y habido" },
+        { name: "Acreditacion de laboratorio", status: "Vigente", reference: "Certificado vigente" },
+        { name: "Declaracion jurada anticorrupcion", status: "Registrado", reference: "DJ-2026-003" },
+      ],
+      contracts: [
+        { object: "Calibracion de equipos de navegacion", amount: "S/ 198,000.00", year: "2025", result: "Conforme" },
+        { object: "Mantenimiento de radios aeronauticas", amount: "S/ 156,000.00", year: "2024", result: "Conforme" },
+      ],
+      observations: "Proveedor habilitado para servicios de avionica, calibracion y soporte de equipos de comunicacion.",
+    },
+    {
+      name: "Rotor Service LATAM",
+      ruc: "20607845123",
+      specialty: "Componentes dinamicos",
+      score: 72,
+      docs: "Incompleto",
+      sanctions: "Revision requerida",
+      representative: "Sr. Daniel Ferrer",
+      address: "Calle Industria 884, Ate, Lima",
+      phone: "+51 1 356-1140",
+      email: "ventas@rotorservice.lat",
+      registry: "REG-PROV-2026-004",
+      validity: "Pendiente de regularizacion",
+      experience: "6 anos en reparacion y cambio de componentes dinamicos",
+      category: "Servicios y componentes",
+      certifications: ["Procedimientos tecnicos del fabricante", "Personal certificado por especialidad"],
+      documents: [
+        { name: "RNP / OSCE", status: "Vigente", reference: "Constancia 2026" },
+        { name: "Ficha RUC", status: "Vigente", reference: "SUNAT activo y habido" },
+        { name: "Seguro de responsabilidad civil", status: "Pendiente", reference: "No adjuntado" },
+        { name: "Declaracion jurada anticorrupcion", status: "Pendiente", reference: "No adjuntado" },
+      ],
+      contracts: [
+        { object: "Evaluacion de rotor principal", amount: "S/ 320,000.00", year: "2025", result: "En revision" },
+        { object: "Servicio de componentes dinamicos", amount: "S/ 230,000.00", year: "2024", result: "Observado" },
+      ],
+      observations: "No debe pasar a habilitado hasta completar seguro y declaracion anticorrupcion.",
+    },
   ],
   aircraft: [
     { tail: "PNP-501", model: "Bell 412 EP", readiness: 82, need: "Kit de sellos hidraulicos", eta: "7 dias" },
@@ -385,6 +493,225 @@ createApp({
     },
     printProcess() {
       window.print();
+    },
+    escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    },
+    supplierStatusClass(value) {
+      const text = String(value).toLowerCase();
+      if (text.includes("incompleto") || text.includes("pendiente") || text.includes("observado") || text.includes("revision")) return "bad";
+      if (text.includes("renovar") || text.includes("revision")) return "warn";
+      if (text.includes("vigente") || text.includes("registrado") || text.includes("conforme")) return "ok";
+      return "info";
+    },
+    supplierFichaCode(supplier) {
+      const index = this.data.suppliers.findIndex((item) => item.name === supplier.name) + 1;
+      return `FP-${String(index || 0).padStart(3, "0")}-2026-SIGECA`;
+    },
+    renderSupplierRows(items, columns) {
+      return items.map((item) => `
+        <tr>
+          ${columns.map((column) => {
+            const value = item[column.key];
+            if (column.status) {
+              return `<td><span class="pdf-status ${this.supplierStatusClass(value)}">${this.escapeHtml(value)}</span></td>`;
+            }
+            return `<td>${this.escapeHtml(value)}</td>`;
+          }).join("")}
+        </tr>
+      `).join("");
+    },
+    openSupplierFicha(supplier) {
+      const fichaCode = this.supplierFichaCode(supplier);
+      const generatedAt = this.formatSyncTimestamp();
+      const certifications = (supplier.certifications || []).map((item) => `<li>${this.escapeHtml(item)}</li>`).join("");
+      const documents = this.renderSupplierRows(supplier.documents || [], [
+        { key: "name" },
+        { key: "status", status: true },
+        { key: "reference" },
+      ]);
+      const contracts = this.renderSupplierRows(supplier.contracts || [], [
+        { key: "object" },
+        { key: "amount" },
+        { key: "year" },
+        { key: "result", status: true },
+      ]);
+      const baseHref = new URL(".", window.location.href).href;
+      const popup = window.open("", "_blank");
+
+      if (!popup) {
+        this.showToast("El navegador bloqueo la ficha. Permite ventanas emergentes para generar el PDF.");
+        return;
+      }
+
+      popup.document.write(`
+        <!doctype html>
+        <html lang="es">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <base href="${this.escapeHtml(baseHref)}">
+          <title>${this.escapeHtml(fichaCode)} · ${this.escapeHtml(supplier.name)}</title>
+          <link rel="preconnect" href="https://fonts.googleapis.com">
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+          <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+          <style>
+            :root { --ink: #171a1f; --muted: #616a74; --line: #d4d9df; --navy: #142f54; --blue: #2468b2; --green: #2f8f68; --amber: #b7791f; --red: #b42318; }
+            * { box-sizing: border-box; }
+            body { margin: 0; background: #e9eef4; color: var(--ink); font-family: Manrope, Arial, sans-serif; }
+            .print-bar { position: sticky; top: 0; z-index: 2; display: flex; justify-content: space-between; gap: 12px; align-items: center; padding: 12px 18px; border-bottom: 1px solid var(--line); background: #fff; }
+            .print-bar span { color: var(--muted); font-size: 12px; font-weight: 700; }
+            button { min-height: 38px; padding: 0 14px; border: 1px solid var(--blue); border-radius: 8px; background: var(--blue); color: #fff; font: inherit; font-weight: 800; cursor: pointer; }
+            .sheet { width: min(100%, 920px); margin: 22px auto; padding: 10mm 12mm 8mm; border: 1px solid #cbd2da; background: #fff; box-shadow: 0 14px 40px rgba(24, 39, 75, 0.11); }
+            .header { display: flex; justify-content: center; text-align: center; }
+            .brand { display: grid; justify-items: center; gap: 5px; }
+            .brand img { width: 72px; height: 72px; object-fit: contain; }
+            .brand b, .brand span { display: block; }
+            .brand b { font-size: 13px; font-weight: 800; }
+            .brand span { color: #292e34; font-size: 9px; font-weight: 700; line-height: 1.25; }
+            .title { margin: 9px 0 18px; }
+            .title h1 { margin: 0; color: #15191e; font-family: "Barlow Condensed", Manrope, sans-serif; font-size: 26px; line-height: 1.12; text-decoration: underline; text-transform: uppercase; }
+            .reference { display: flex; justify-content: space-between; gap: 12px; margin-top: 7px; color: #58616b; font-size: 9px; font-weight: 800; }
+            .subject { display: grid; grid-template-columns: 94px minmax(0, 1fr); gap: 12px; margin-bottom: 18px; font-size: 12px; line-height: 1.45; }
+            .subject p { margin: 0; text-align: justify; }
+            .section { padding: 11px 0 10px; border-bottom: 1px solid var(--line); break-inside: avoid; page-break-inside: avoid; }
+            .section h2 { margin: 0 0 8px; font-size: 12px; font-weight: 800; text-transform: uppercase; }
+            .fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px 22px; }
+            .field label { display: block; margin-bottom: 2px; color: var(--muted); font-size: 8px; font-weight: 800; letter-spacing: .4px; text-transform: uppercase; }
+            .field b { display: block; color: #20252b; font-size: 11px; line-height: 1.4; }
+            .score { color: var(--navy); font-family: "Barlow Condensed", Manrope, sans-serif; font-size: 20px; }
+            ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px 24px; margin: 0; padding-left: 19px; font-size: 10px; line-height: 1.45; }
+            table { width: 100%; border-collapse: collapse; font-size: 9px; }
+            th, td { padding: 7px 8px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+            th { color: var(--muted); font-size: 8px; text-transform: uppercase; }
+            .pdf-status { display: inline-flex; min-height: 21px; align-items: center; padding: 0 7px; border-radius: 999px; font-size: 8px; font-weight: 800; white-space: nowrap; }
+            .pdf-status.ok { background: #e7f6ed; color: var(--green); }
+            .pdf-status.warn { background: #fff5dc; color: var(--amber); }
+            .pdf-status.bad { background: #ffe8e6; color: var(--red); }
+            .pdf-status.info { background: #e7f0ff; color: var(--blue); }
+            .trace { display: flex; justify-content: space-between; gap: 12px; margin-top: 10px; padding: 9px 12px; border-top: 1px solid var(--line); }
+            .trace b, .trace span { display: block; }
+            .trace b { color: var(--navy); font-size: 9px; }
+            .trace span { margin-top: 2px; color: var(--muted); font-size: 9px; }
+            .trace .code { text-align: right; }
+            .trace .code b { font-family: "Barlow Condensed", Manrope, sans-serif; font-size: 15px; }
+            .footer { display: flex; justify-content: space-between; gap: 12px; padding-top: 10px; color: var(--muted); font-size: 8px; }
+            @page { size: A4 portrait; margin: 10mm; }
+            @media print {
+              body { background: #fff; }
+              .print-bar { display: none; }
+              .sheet { width: 100%; margin: 0; padding: 3mm 4mm 2mm; border: 0; box-shadow: none; }
+              .pdf-status, .trace { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="print-bar">
+            <span>Ficha de proveedor SIGECA · ${this.escapeHtml(supplier.name)}</span>
+            <button onclick="window.print()">Imprimir / Guardar PDF</button>
+          </div>
+          <article class="sheet">
+            <header class="header">
+              <div class="brand">
+                <img src="assets/DIVMAAER.svg" alt="Escudo de la Division de Mantenimiento Aeropolicial">
+                <div>
+                  <b>POLICIA NACIONAL DEL PERU</b>
+                  <span>DIRECCION DE AVIACION POLICIAL</span>
+                  <span>DIVISION DE MANTENIMIENTO AEREO · SIGECA</span>
+                </div>
+              </div>
+            </header>
+            <div class="title">
+              <h1>FICHA DE PROVEEDOR ${this.escapeHtml(fichaCode)}</h1>
+              <div class="reference">
+                <span>PADRON DE PROVEEDORES TECNICOS</span>
+                <span class="pdf-status ${this.supplierStatusClass(supplier.docs)}">${this.escapeHtml(supplier.docs)}</span>
+              </div>
+            </div>
+            <div class="subject">
+              <b>ASUNTO:</b>
+              <p>Ficha de evaluacion, habilitacion documental y desempeno del proveedor ${this.escapeHtml(supplier.name)}, vinculada al modulo de proveedores SIGECA.</p>
+            </div>
+            <section class="section">
+              <h2>I. Datos generales</h2>
+              <div class="fields">
+                <div class="field"><label>Razon social</label><b>${this.escapeHtml(supplier.name)}</b></div>
+                <div class="field"><label>RUC</label><b>${this.escapeHtml(supplier.ruc)}</b></div>
+                <div class="field"><label>Representante</label><b>${this.escapeHtml(supplier.representative)}</b></div>
+                <div class="field"><label>Rubro / especialidad</label><b>${this.escapeHtml(supplier.specialty)}</b></div>
+                <div class="field"><label>Categoria</label><b>${this.escapeHtml(supplier.category)}</b></div>
+                <div class="field"><label>Registro SIGECA</label><b>${this.escapeHtml(supplier.registry)}</b></div>
+                <div class="field"><label>Domicilio</label><b>${this.escapeHtml(supplier.address)}</b></div>
+                <div class="field"><label>Contacto</label><b>${this.escapeHtml(supplier.phone)} · ${this.escapeHtml(supplier.email)}</b></div>
+              </div>
+            </section>
+            <section class="section">
+              <h2>II. Evaluacion y vigencia</h2>
+              <div class="fields">
+                <div class="field"><label>Puntaje SIGECA</label><b><span class="score">${this.escapeHtml(supplier.score)}/100</span></b></div>
+                <div class="field"><label>Estado documental</label><b><span class="pdf-status ${this.supplierStatusClass(supplier.docs)}">${this.escapeHtml(supplier.docs)}</span></b></div>
+                <div class="field"><label>Vigencia / renovacion</label><b>${this.escapeHtml(supplier.validity)}</b></div>
+                <div class="field"><label>Registro de sanciones</label><b>${this.escapeHtml(supplier.sanctions)}</b></div>
+                <div class="field"><label>Experiencia declarada</label><b>${this.escapeHtml(supplier.experience)}</b></div>
+                <div class="field"><label>Fecha de emision</label><b>${this.escapeHtml(generatedAt)}</b></div>
+              </div>
+            </section>
+            <section class="section">
+              <h2>III. Certificaciones y habilitaciones tecnicas</h2>
+              <ul>${certifications}</ul>
+            </section>
+            <section class="section">
+              <h2>IV. Control documental</h2>
+              <table>
+                <thead><tr><th>Documento</th><th>Estado</th><th>Referencia</th></tr></thead>
+                <tbody>${documents}</tbody>
+              </table>
+            </section>
+            <section class="section">
+              <h2>V. Antecedentes contractuales referenciales</h2>
+              <table>
+                <thead><tr><th>Objeto</th><th>Monto</th><th>Ano</th><th>Resultado</th></tr></thead>
+                <tbody>${contracts}</tbody>
+              </table>
+            </section>
+            <section class="section">
+              <h2>VI. Observaciones SIGECA</h2>
+              <div class="fields">
+                <div class="field"><label>Comentario de seguimiento</label><b>${this.escapeHtml(supplier.observations)}</b></div>
+                <div class="field"><label>Uso de la ficha</label><b>Documento demostrativo para consulta interna. No reemplaza la verificacion oficial ante OSCE, SUNAT u otra entidad competente.</b></div>
+              </div>
+            </section>
+            <section class="trace">
+              <div>
+                <b>TRAZABILIDAD SIGECA</b>
+                <span>Ficha generada desde el modulo Proveedores con datos demostrativos del prototipo.</span>
+              </div>
+              <div class="code">
+                <span>EXPEDIENTE</span>
+                <b>${this.escapeHtml(fichaCode)}</b>
+              </div>
+            </section>
+            <footer class="footer">
+              <span>DIRAVPOL PNP · Unidad Ejecutora N.º 18</span>
+              <span>Ficha demostrativa SIGECA</span>
+              <span>${this.escapeHtml(generatedAt)}</span>
+            </footer>
+          </article>
+          <script>
+            window.addEventListener("load", () => {
+              setTimeout(() => window.print(), 350);
+            });
+          <\/script>
+        </body>
+        </html>
+      `);
+      popup.document.close();
+      this.showToast(`Ficha generada para ${supplier.name}.`);
     },
     clearSyncSearch() {
       this.query = "";
@@ -739,7 +1066,7 @@ createApp({
               <module-header title="Proveedores" lead="Padron de proveedores tecnicos con especialidad aeronautica, vigencia documental, desempeno y alertas de habilitacion." :stats="[{ value: data.suppliers.length, label: 'registrados' }, { value: '3', label: 'habilitados' }, { value: '86', label: 'puntaje medio' }, { value: '1', label: 'revision requerida' }]" />
               <section class="panel"><div class="toolbar"><input class="search" v-model="query" type="search" placeholder="Buscar proveedor o especialidad..."><div class="filters"><select class="select" v-model="status"><option>Todos</option><option>Vigente</option><option>Por renovar</option><option>Incompleto</option></select><button class="btn" @click="handleAction('new')">Nuevo registro</button></div></div>
                 <div class="table-wrap"><table><thead><tr><th>Proveedor</th><th>Especialidad</th><th>Score</th><th>Documentos</th><th>Observacion</th><th>Acciones</th></tr></thead><tbody>
-                  <tr v-for="item in filteredSuppliers" :key="item.name"><td><b>{{ item.name }}</b></td><td>{{ item.specialty }}</td><td>{{ item.score }}/100<div class="progress"><span :style="{ width: item.score + '%' }"></span></div></td><td><span class="status" :class="statusClass(item.docs)">{{ item.docs }}</span></td><td>{{ item.sanctions }}</td><td class="actions"><button class="mini" @click="handleAction('open')">Ficha</button><button class="mini" @click="handleAction('verify')">Verificar</button></td></tr>
+                  <tr v-for="item in filteredSuppliers" :key="item.name"><td><b>{{ item.name }}</b></td><td>{{ item.specialty }}</td><td>{{ item.score }}/100<div class="progress"><span :style="{ width: item.score + '%' }"></span></div></td><td><span class="status" :class="statusClass(item.docs)">{{ item.docs }}</span></td><td>{{ item.sanctions }}</td><td class="actions"><button class="mini" @click="openSupplierFicha(item)">Ficha</button><button class="mini" @click="handleAction('verify')">Verificar</button></td></tr>
                 </tbody></table></div>
               </section>
             </template>
