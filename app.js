@@ -286,7 +286,7 @@ createApp({
       <div class="app-shell">
         <aside class="sidebar" :class="{ open: sidebarOpen }">
           <div class="brand-block">
-            <img class="crest" src="assets/DIVMAAER.jpg" alt="Escudo de la División de Mantenimiento Aeropolicial">
+            <img class="crest" src="assets/DIVMAAER.svg" alt="Escudo de la División de Mantenimiento Aeropolicial">
             <div>
               <strong>DIRAVPOL</strong>
               <span>UNIDAD EJECUTORA N.º 18</span>
@@ -404,7 +404,7 @@ createApp({
                 </section>
                 <article class="requirement-sheet">
                   <header class="document-header">
-                    <div class="document-brand"><img class="document-crest" src="assets/DIVMAAER.jpg" alt="Escudo de la División de Mantenimiento Aeropolicial"><div><b>POLICÍA NACIONAL DEL PERÚ</b><span>DIRECCIÓN DE AVIACIÓN POLICIAL</span><span>DIVISIÓN DE MANTENIMIENTO AÉREO · {{ selectedRequirement.section }}</span></div></div>
+                    <div class="document-brand"><img class="document-crest" src="assets/DIVMAAER.svg" alt="Escudo de la División de Mantenimiento Aeropolicial"><div><b>POLICÍA NACIONAL DEL PERÚ</b><span>DIRECCIÓN DE AVIACIÓN POLICIAL</span><span>DIVISIÓN DE MANTENIMIENTO AÉREO · {{ selectedRequirement.section }}</span></div></div>
                   </header>
                   <div class="report-title"><h1>INFORME N.° {{ selectedReportNumber }}-2025-COMOPPOL-DIRAVPOL/DIVMAAER-CONTROL DE CALIDAD</h1><div class="report-reference"><span>REQUERIMIENTO {{ selectedRequirement.id }}</span><span class="status" :class="statusClass(selectedRequirement.status)">{{ selectedRequirement.status }}</span></div></div>
                   <div class="report-subject"><b>ASUNTO:</b><p>{{ selectedRequirement.subject }}</p></div>

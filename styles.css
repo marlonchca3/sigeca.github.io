@@ -83,11 +83,13 @@ button {
 }
 
 .crest {
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  object-fit: cover;
-  object-position: center top;
+  flex: 0 0 auto;
+  width: 56px;
+  height: 56px;
+  padding: 4px;
+  border-radius: 8px;
+  object-fit: contain;
+  object-position: center;
   background: #fff;
 }
 
@@ -1086,9 +1088,10 @@ td {
 .document-crest {
   width: 48px;
   height: 48px;
-  border-radius: 50%;
-  object-fit: cover;
-  object-position: center top;
+  padding: 3px;
+  border-radius: 8px;
+  object-fit: contain;
+  object-position: center;
   background: #fff;
 }
 
@@ -1303,8 +1306,8 @@ td {
 }
 
 .document-crest {
-  width: 64px;
-  height: 64px;
+  width: 72px;
+  height: 72px;
 }
 
 .document-brand b {
@@ -1537,7 +1540,8 @@ td {
     position: fixed;
     z-index: 10;
     inset: 0 auto 0 0;
-    width: 286px;
+    width: min(286px, calc(100vw - 42px));
+    overflow-y: auto;
     transform: translateX(-105%);
     transition: transform 180ms ease;
   }
@@ -1571,6 +1575,7 @@ td {
 
 @media (max-width: 720px) {
   .topbar {
+    min-height: 64px;
     padding: 0 14px;
   }
 
@@ -1585,8 +1590,21 @@ td {
     padding: 18px 14px;
   }
 
+  .brand-block {
+    align-items: flex-start;
+  }
+
+  .crest {
+    width: 52px;
+    height: 52px;
+  }
+
   .module-header {
     padding: 18px;
+  }
+
+  .header-stat-grid {
+    gap: 10px;
   }
 
   .header-stat-grid,
@@ -1594,6 +1612,12 @@ td {
   .record-grid,
   .aircraft-grid {
     grid-template-columns: 1fr;
+  }
+
+  .module-list span,
+  .tag,
+  .status {
+    white-space: normal;
   }
 
   .toolbar {
