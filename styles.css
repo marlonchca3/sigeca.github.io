@@ -15,6 +15,8 @@
   --shadow: 0 14px 40px rgba(24, 39, 75, 0.11);
 }
 
+
+
 [v-cloak] {
   display: none;
 }
@@ -1571,6 +1573,19 @@ td {
   .record-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
+
+body::after {
+  content: "© 2026 Marlon Peterson Chuquino Capa";
+  position: fixed;
+  bottom: 14px;
+  right: 18px;
+  color: rgba(23, 32, 51, 0.02);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  pointer-events: none;
+  z-index: 9999;
 }
 
 @media (max-width: 720px) {
