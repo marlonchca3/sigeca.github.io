@@ -290,12 +290,6 @@ const sourceData = {
       observations: "No debe pasar a habilitado hasta completar seguro y declaracion anticorrupcion.",
     },
   ],
-  aircraft: [
-    { tail: "PNP-501", model: "Bell 412 EP", readiness: 82, need: "Kit de sellos hidraulicos", eta: "7 dias" },
-    { tail: "PNP-512", model: "MI-171Sh", readiness: 64, need: "Overhaul motor TV3-117", eta: "Proceso CP-001" },
-    { tail: "PNP-320", model: "Cessna 208B", readiness: 91, need: "Baterias aeronauticas", eta: "10 dias" },
-    { tail: "PNP-607", model: "EC145", readiness: 76, need: "Inspeccion 600 horas", eta: "15 dias" },
-  ],
   alerts: [
     { level: "Alto", title: "Riesgo de desabastecimiento", detail: "El stock de componentes criticos para Bell 412 cubre 18 dias de operacion.", owner: "Abastecimiento" },
     { level: "Alto", title: "Plazo contractual sensible", detail: "CON-052-2024 vence sin conformidad registrada por el area usuaria.", owner: "Logistica" },
@@ -415,8 +409,45 @@ createApp({
         contracts: this.filteredContracts.filter((contract) => contract.category === category),
       }));
     },
+    aircraftContractLinks() {
+      const contractsById = new Map(this.contracts.map((contract) => [String(contract.id).trim(), contract]));
+      return this.data.requirements.flatMap((requirement) => {
+        const contract = contractsById.get(String(requirement.contractId).trim());
+        return contract ? [{ requirement, contract }] : [];
+      });
+    },
+    linkedAircraftCount() {
+      return new Set(this.aircraftContractLinks.map(({ requirement }) => requirement.aircraft)).size;
+    },
+    contractRiskAlerts() {
+      return this.aircraftContractLinks.flatMap(({ requirement, contract }) => {
+        const process = this.data.processes.find((item) => item.contractId === requirement.contractId);
+        const contractStatus = String(contract.status || "").toLowerCase();
+        const statusRisk = /observado|desierto|cancelado|suspendido|vencido/.test(contractStatus)
+          ? "Alto"
+          : /incompleto|pendiente|retraso|demora/.test(contractStatus)
+            ? "Medio"
+            : null;
+        const processRisk = process?.risk && process.risk !== "Bajo" ? process.risk : null;
+        const level = processRisk || statusRisk || (requirement.status === "Observado" ? "Alto" : process?.risk);
+        if (!level || level === "Bajo") return [];
+
+        return [{
+          level,
+          title: process?.title || requirement.item,
+          detail: `${contract.id} · ${contract.object}. ${process?.riskNote || `Estado de contratación: ${contract.status}.`}`,
+          owner: process?.responsible || requirement.responsible,
+          contractId: contract.id,
+          contractStatus: contract.status,
+        }];
+      });
+    },
   },
   methods: {
+    navigationBadge(item) {
+      if (item.view !== "alertas") return item.badge;
+      return this.liveContracts === null ? null : this.contractRiskAlerts.length || null;
+    },
     setView(view) {
       this.currentView = view;
       this.selectedRequirementId = null;
@@ -424,7 +455,7 @@ createApp({
       this.query = "";
       this.status = "Todos";
       this.sidebarOpen = false;
-      if (view === "contratos" && this.contractSync.status !== "loading") {
+      if (["contratos", "aeronaves", "alertas"].includes(view) && this.contractSync.status !== "loading") {
         this.syncContractsFromSeace();
       }
     },
@@ -805,7 +836,7 @@ createApp({
               :class="{ active: currentView === item.view }"
               @click="setView(item.view)"
             >
-              <span>{{ item.icon }}</span>{{ item.label }}<em v-if="item.badge" class="nav-badge">{{ item.badge }}</em>
+              <span>{{ item.icon }}</span>{{ item.label }}<em v-if="navigationBadge(item)" class="nav-badge">{{ navigationBadge(item) }}</em>
             </button>
           </nav>
           <div class="sidebar-footer"><span class="live-dot"></span> Prototipo académico<br><small>Datos ficticios · 2025</small></div>
@@ -1070,21 +1101,23 @@ createApp({
             </template>
 
             <template v-else-if="currentView === 'aeronaves'">
-              <module-header title="Aeronaves" lead="Vista de disponibilidad logistica por matricula, necesidad asociada y dependencia con requerimientos o procesos de contratacion." :stats="[{ value: data.aircraft.length, label: 'monitoreadas' }, { value: '78%', label: 'disponibilidad media' }, { value: '2', label: 'necesidades criticas' }, { value: '7 dias', label: 'menor ETA' }]" />
-              <section class="panel"><div class="aircraft-grid">
-                <article v-for="aircraft in data.aircraft" :key="aircraft.tail" class="aircraft-card">
-                  <div class="aircraft-head"><div><span class="tag">{{ aircraft.tail }}</span><h3>{{ aircraft.model }}</h3></div><span class="status" :class="aircraft.readiness > 85 ? 'ok' : aircraft.readiness > 70 ? 'warn' : 'bad'">{{ aircraft.readiness }}%</span></div>
-                  <div class="progress"><span :style="{ width: aircraft.readiness + '%' }"></span></div>
-                  <p><b>Necesidad:</b> {{ aircraft.need }}</p><p><b>Atencion estimada:</b> {{ aircraft.eta }}</p>
-                  <div class="actions"><button class="mini" @click="handleAction('open')">Historial</button><button class="mini" @click="handleAction('link')">Vincular proceso</button></div>
+              <module-header title="Aeronaves y contrataciones" lead="Necesidades aeronauticas vinculadas con contratos consultados en OECE/SEACE. El estado y monto se toman del registro contractual." :stats="[{ value: linkedAircraftCount, label: 'aeronaves o areas vinculadas' }, { value: aircraftContractLinks.length, label: 'contratos vinculados' }, { value: contracts.length, label: 'contratos consultados' }, { value: contractSync.status === 'ok' ? 'OECE/SEACE' : 'Pendiente', label: 'fuente' }]" />
+              <section class="panel"><div v-if="aircraftContractLinks.length" class="aircraft-grid">
+                <article v-for="link in aircraftContractLinks" :key="link.contract.id" class="aircraft-card">
+                  <div class="aircraft-head"><div><span class="tag">{{ link.contract.id }}</span><h3>{{ link.requirement.aircraft }}</h3></div><span class="status" :class="statusClass(link.contract.status)">{{ link.contract.status }}</span></div>
+                  <p><b>Necesidad:</b> {{ link.requirement.item }}</p>
+                  <p><b>Objeto contratado:</b> {{ link.contract.object }}</p>
+                  <p><b>Proveedor:</b> {{ link.contract.supplier }}</p>
+                  <p><b>Monto:</b> {{ link.contract.value }}</p>
+                  <p><b>Fecha:</b> {{ link.contract.date || link.contract.end }}</p>
                 </article>
-              </div></section>
+              </div><p v-else class="empty-contracts">{{ contractSync.status === 'loading' ? 'Cargando contrataciones oficiales...' : contractSync.status === 'error' ? 'No se pudieron cargar las contrataciones; no se muestran datos de aeronaves sin respaldo contractual.' : 'No hay contratos consultados vinculados a los requerimientos aeronauticos.' }}</p></section>
             </template>
 
             <template v-else-if="currentView === 'alertas'">
-              <module-header title="Alertas y riesgos" lead="Priorizacion de advertencias generadas por reglas de negocio: plazos, stock, documentacion, disponibilidad y trazabilidad contractual." :stats="[{ value: data.alerts.length, label: 'alertas abiertas' }, { value: '2', label: 'riesgo alto' }, { value: '4', label: 'areas involucradas' }, { value: '24 h', label: 'tiempo objetivo' }]" />
+              <module-header title="Alertas y riesgos de contratacion" lead="Riesgos asociados a contratos consultados en OECE/SEACE y a sus requerimientos y procesos vinculados." :stats="[{ value: contractRiskAlerts.length, label: 'riesgos identificados' }, { value: contractRiskAlerts.filter((alert) => alert.level === 'Alto').length, label: 'riesgo alto' }, { value: contractRiskAlerts.filter((alert) => alert.level === 'Medio').length, label: 'riesgo medio' }, { value: contractRiskAlerts.length ? 'OECE/SEACE' : 'Pendiente', label: 'fuente' }]" />
               <section class="content-grid">
-                <div class="panel"><h2>Bandeja de alertas</h2><div class="risk-list"><article v-for="alert in data.alerts" :key="alert.title" class="risk-item"><div class="risk-top"><h3>{{ alert.title }}</h3><span class="status" :class="statusClass(alert.level)">{{ alert.level }}</span></div><p>{{ alert.detail }}</p><span class="tag">{{ alert.owner }}</span></article></div></div>
+                <div class="panel"><h2>Riesgos vinculados a contratos</h2><div v-if="contractRiskAlerts.length" class="risk-list"><article v-for="alert in contractRiskAlerts" :key="alert.contractId" class="risk-item"><div class="risk-top"><h3>{{ alert.title }}</h3><span class="status" :class="statusClass(alert.level)">{{ alert.level }}</span></div><p>{{ alert.detail }}</p><span class="tag">Contrato {{ alert.contractId }} · {{ alert.contractStatus }}</span><span class="tag">{{ alert.owner }}</span></article></div><p v-else class="empty-contracts">{{ contractSync.status === 'loading' ? 'Cargando contrataciones oficiales...' : contractSync.status === 'error' ? 'No se pudieron cargar las contrataciones; no se muestran alertas sin respaldo contractual.' : 'No se identificaron riesgos en los contratos y procesos consultados.' }}</p></div>
                 <aside class="panel"><h2>Respuesta sugerida</h2><div class="timeline"><article class="timeline-item"><time>Paso 1</time><h3>Validar fuente</h3><p>Contrastar alerta con expediente, contrato o kardex logistico asociado.</p></article><article class="timeline-item"><time>Paso 2</time><h3>Asignar responsable</h3><p>Registrar area duena, plazo de respuesta y evidencia requerida.</p></article><article class="timeline-item"><time>Paso 3</time><h3>Cerrar con sustento</h3><p>Adjuntar informe, conformidad o actualizacion documental antes de cerrar.</p></article></div></aside>
               </section>
             </template>
