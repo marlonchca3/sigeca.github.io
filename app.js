@@ -826,14 +826,12 @@ createApp({
               <module-header
                 title="Estructura SIGECA DIRAVPOL"
                 lead="Mapa operativo para ordenar la planificacion contractual, los requerimientos, el flujo de gestion, la analitica, los proveedores y el monitoreo de integridad."
-                :actions="true"
                 :stats="[
                   { value: '18', label: 'requerimientos activos' },
                   { value: contractCount, label: 'contratos SEACE' },
                   { value: '5', label: 'modulos funcionales' },
                   { value: '4', label: 'alertas de riesgo' },
                 ]"
-                @action="handleAction"
               />
               <section class="module-map">
                 <article class="module-tile" @click="setView('requerimientos')">
