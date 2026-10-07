@@ -17,6 +17,37 @@ const SEACE_SOURCE = {
 
 const CONTRACTS_URL = window.location.port === "4173" ? "/api/contracts" : "contracts.json";
 
+const homeGraphicSlides = {
+  needs: [
+    { title: "Grasas y lubricantes aeronáuticos", detail: "Mantenimiento preventivo de la flota DIRAVPOL · Contrato OECE 1004341", status: "Bienes" },
+    { title: "Neumáticos para Antonov AN-32B PNP-233", detail: "Componentes para el tren de aterrizaje · Contrato OECE 2422008", status: "Bienes" },
+    { title: "Combustible de aviación", detail: "Abastecimiento para bases y aeropuertos · Contrato OECE 2419011", status: "Bienes" },
+  ],
+  courses: [
+    { title: "Gestión pública", detail: "Principios, sistemas administrativos y servicio al ciudadano.", status: "Curso" },
+    { title: "Contratación con el Estado", detail: "Normativa, procedimientos de selección y ejecución contractual.", status: "Curso" },
+    { title: "Gestión de contratos y abastecimiento", detail: "Seguimiento de entregables, conformidades y control de suministros.", status: "Curso" },
+  ],
+  training: [
+    { title: "My. Ana Salazar", detail: "Contratación con el Estado", status: "Capacitado" },
+    { title: "Tte. Crnl. Jorge Rivas", detail: "Gestión pública", status: "Capacitado" },
+    { title: "Cap. Luis Mendoza", detail: "Gestión de contratos", status: "Capacitado" },
+    { title: "Cmdte. Raúl Castro", detail: "Curso pendiente: Contratación con el Estado", status: "Pendiente" },
+    { title: "Tte. Carla Paredes", detail: "Curso pendiente: Gestión pública", status: "Pendiente" },
+    { title: "My. Diego Vargas", detail: "Curso pendiente: Gestión de contratos", status: "Pendiente" },
+  ],
+  observed: [
+    { title: "Neumáticos para Antonov AN-32B", detail: "REQ-2026-002 · Sustento técnico observado.", status: "REQ-2026-002" },
+    { title: "Inspección Check C del Antonov", detail: "REQ-2026-004 · Informe técnico en revisión.", status: "REQ-2026-004" },
+    { title: "Grasas y lubricantes aeronáuticos", detail: "1004341 · Revisar consistencia de especificaciones antes de continuar.", status: "1004341" },
+  ],
+  audits: [
+    { title: "Revisión de expedientes de bienes", detail: "20 de octubre de 2026 · Requerimientos, especificaciones y estudio de mercado.", status: "Próxima" },
+    { title: "Auditoría de ejecución contractual", detail: "12 de noviembre de 2026 · Entregables, conformidades y penalidades.", status: "Programada" },
+    { title: "Control de cierre anual", detail: "15 de diciembre de 2026 · Archivo, pagos y trazabilidad de contratos.", status: "Programada" },
+  ],
+};
+
 const sourceData = {
   requirements: [
     { id: "REQ-2026-001", contractId: "1004341", item: "Grasas y lubricantes para mantenimiento e inspeccion", unit: "Mantenimiento Aeronautico", priority: "Alta", amount: "S/ 199,046", status: "En evaluacion", due: "24 sep", aircraft: "Flota DIRAVPOL PNP", requester: "Cap. Luis Mendoza · Mantenimiento Aeronautico", section: "SECCIÓN DE MANTENIMIENTO PROGRAMADO", subject: "Sustento para la adquisicion de grasas y lubricantes para mantenimiento e inspeccion de las aeronaves DIRAVPOL PNP.", background: "La programacion de inspecciones de la flota DIRAVPOL requiere grasas y lubricantes de uso aeronautico compatibles con los manuales tecnicos aplicables. Este requerimiento toma como referencia el objeto SEACE 1004341 registrado en la pestaña Contratos.", objective: "Adquirir grasas y lubricantes certificados para asegurar la continuidad del mantenimiento preventivo y correctivo de las aeronaves DIRAVPOL.", purpose: "Mantener la disponibilidad operacional de la flota con insumos trazables, especificaciones tecnicas verificables y registro documental para auditoria.", specifications: ["Grasas y lubricantes de uso aeronautico", "Compatibilidad con manuales tecnicos de aeronaves DIRAVPOL", "Certificado de calidad y trazabilidad de lote", "Entrega documentada para almacen aeronautico"], funding: "Meta 004 · Mantenimiento de aeronaves", process: "Bienes · Procedimiento competitivo", created: "10 sep 2026", responsible: "My. Ana Salazar · Oficina de Logística" },
@@ -359,6 +390,9 @@ createApp({
       sidebarOpen: false,
       toastMessage: "",
       toastVisible: false,
+      homeGraphicOpen: "",
+      homeGraphicIndex: 0,
+      homeGraphicSlides,
       liveContracts: null,
       contractSync: {
         status: "idle",
@@ -444,6 +478,15 @@ createApp({
     },
   },
   methods: {
+    toggleHomeGraphic(key) {
+      this.homeGraphicOpen = this.homeGraphicOpen === key ? "" : key;
+      this.homeGraphicIndex = 0;
+    },
+    moveHomeGraphicSlide(direction) {
+      const slides = this.homeGraphicSlides[this.homeGraphicOpen] || [];
+      if (!slides.length) return;
+      this.homeGraphicIndex = (this.homeGraphicIndex + direction + slides.length) % slides.length;
+    },
     navigationBadge(item) {
       if (item.view !== "alertas") return item.badge;
       return this.liveContracts === null ? null : this.contractRiskAlerts.length || null;
@@ -856,7 +899,7 @@ createApp({
             <template v-if="currentView === 'inicio'">
               <module-header
                 title="Estructura SIGECA DIRAVPOL"
-                lead="Mapa operativo para ordenar la planificacion contractual, los requerimientos, el flujo de gestion, la analitica, los proveedores y el monitoreo de integridad."
+                lead="Mapa operativo para ordenar la planificacion contractual, los requerimientos, el flujo de gestion, la analitica y el monitoreo de integridad."
                 :stats="[
                   { value: '18', label: 'requerimientos activos' },
                   { value: contractCount, label: 'contratos SEACE' },
@@ -865,25 +908,106 @@ createApp({
                 ]"
               />
               <section class="module-map">
-                <article class="module-tile" @click="setView('requerimientos')">
+                <article class="module-tile" :class="{ 'has-open-panel': homeGraphicOpen === 'needs' }" @click="setView('requerimientos')">
                   <div><span class="module-kicker">Planificacion y programacion contractual</span><p>Convierte necesidades logisticas en expedientes trazables y priorizados.</p></div>
-                  <div class="module-list"><span>Requerimientos</span><span>PAC</span><span>Sustento tecnico</span></div>
+                  <div class="module-list">
+                    <span>Requerimientos</span>
+                    <button class="module-tab" :aria-expanded="homeGraphicOpen === 'needs'" @click.stop="toggleHomeGraphic('needs')">Cuadro multianual de necesidades</button>
+                  </div>
+                  <section v-if="homeGraphicOpen === 'needs'" class="module-slide-panel" aria-label="Necesidades del cuadro multianual" @click.stop>
+                    <Transition name="module-slide" mode="out-in">
+                      <div :key="'needs-' + homeGraphicIndex" class="module-slide-copy">
+                        <span class="module-slide-count">Necesidad {{ homeGraphicIndex + 1 }} de {{ homeGraphicSlides.needs.length }}</span>
+                        <h3>{{ homeGraphicSlides.needs[homeGraphicIndex].title }}</h3>
+                        <p>{{ homeGraphicSlides.needs[homeGraphicIndex].detail }}</p>
+                        <span class="status info">{{ homeGraphicSlides.needs[homeGraphicIndex].status }}</span>
+                      </div>
+                    </Transition>
+                    <div class="module-slide-controls">
+                      <button class="mini" aria-label="Necesidad anterior" @click.stop="moveHomeGraphicSlide(-1)">‹</button>
+                      <span>{{ homeGraphicIndex + 1 }} / {{ homeGraphicSlides.needs.length }}</span>
+                      <button class="mini" aria-label="Siguiente necesidad" @click.stop="moveHomeGraphicSlide(1)">›</button>
+                    </div>
+                  </section>
                 </article>
-                <article class="module-tile" @click="setView('proveedores')">
-                  <div><span class="module-kicker">Gestion de talentos</span><p>Organiza capacidades internas y soporte externo para ejecutar las contrataciones.</p></div>
-                  <div class="module-list"><span>Contrataciones</span><span>Cursos</span><span>Capacitaciones</span><span>Proveedores</span></div>
+                <article class="module-tile" :class="{ 'has-open-panel': ['courses', 'training'].includes(homeGraphicOpen) }" @click="setView('proveedores')">
+                  <div><span class="module-kicker">Gestion de talentos</span><p>Organiza las capacidades internas para ejecutar las contrataciones.</p></div>
+                  <div class="module-list">
+                    <span>Contrataciones</span>
+                    <button class="module-tab" :aria-expanded="homeGraphicOpen === 'courses'" @click.stop="toggleHomeGraphic('courses')">Cursos</button>
+                    <button class="module-tab" :aria-expanded="homeGraphicOpen === 'training'" @click.stop="toggleHomeGraphic('training')">Capacitaciones</button>
+                  </div>
+                  <section v-if="homeGraphicOpen === 'courses'" class="module-slide-panel" aria-label="Cursos disponibles" @click.stop>
+                    <Transition name="module-slide" mode="out-in">
+                      <div :key="'courses-' + homeGraphicIndex" class="module-slide-copy">
+                        <span class="module-slide-count">Curso {{ homeGraphicIndex + 1 }} de {{ homeGraphicSlides.courses.length }}</span>
+                        <h3>{{ homeGraphicSlides.courses[homeGraphicIndex].title }}</h3>
+                        <p>{{ homeGraphicSlides.courses[homeGraphicIndex].detail }}</p>
+                      </div>
+                    </Transition>
+                    <div class="module-slide-controls">
+                      <button class="mini" aria-label="Curso anterior" @click.stop="moveHomeGraphicSlide(-1)">‹</button>
+                      <span>{{ homeGraphicIndex + 1 }} / {{ homeGraphicSlides.courses.length }}</span>
+                      <button class="mini" aria-label="Siguiente curso" @click.stop="moveHomeGraphicSlide(1)">›</button>
+                    </div>
+                  </section>
+                  <section v-if="homeGraphicOpen === 'training'" class="module-slide-panel" aria-label="Estado de capacitaciones" @click.stop>
+                    <Transition name="module-slide" mode="out-in">
+                      <div :key="'training-' + homeGraphicIndex" class="module-slide-copy">
+                        <span class="module-slide-count">Personal {{ homeGraphicIndex + 1 }} de {{ homeGraphicSlides.training.length }}</span>
+                        <h3>{{ homeGraphicSlides.training[homeGraphicIndex].title }}</h3>
+                        <p>{{ homeGraphicSlides.training[homeGraphicIndex].detail }}</p>
+                        <span class="status" :class="homeGraphicSlides.training[homeGraphicIndex].status === 'Capacitado' ? 'ok' : 'bad'">{{ homeGraphicSlides.training[homeGraphicIndex].status }}</span>
+                      </div>
+                    </Transition>
+                    <div class="module-slide-controls">
+                      <button class="mini" aria-label="Personal anterior" @click.stop="moveHomeGraphicSlide(-1)">‹</button>
+                      <span>{{ homeGraphicIndex + 1 }} / {{ homeGraphicSlides.training.length }}</span>
+                      <button class="mini" aria-label="Siguiente personal" @click.stop="moveHomeGraphicSlide(1)">›</button>
+                    </div>
+                  </section>
                 </article>
-                <article class="module-tile" @click="setView('procesos')">
+                <article class="module-tile" :class="{ 'has-open-panel': homeGraphicOpen === 'observed' }" @click="setView('procesos')">
                   <div><span class="module-kicker">Flujo de tramite de gestion</span><p>Sigue cada expediente desde etapa preparatoria hasta contrato y conformidad.</p></div>
-                  <div class="module-list"><span>Procesos</span><span>Contratos</span><span>Hitos</span></div>
+                  <div class="module-list"><span>Procesos</span><span>Contratos</span><button class="module-tab" :aria-expanded="homeGraphicOpen === 'observed'" @click.stop="toggleHomeGraphic('observed')">Observados</button></div>
+                  <section v-if="homeGraphicOpen === 'observed'" class="module-slide-panel" aria-label="Expedientes observados" @click.stop>
+                    <Transition name="module-slide" mode="out-in">
+                      <div :key="'observed-' + homeGraphicIndex" class="module-slide-copy">
+                        <span class="module-slide-count">Observado {{ homeGraphicIndex + 1 }} de {{ homeGraphicSlides.observed.length }}</span>
+                        <h3>{{ homeGraphicSlides.observed[homeGraphicIndex].title }}</h3>
+                        <p>{{ homeGraphicSlides.observed[homeGraphicIndex].detail }}</p>
+                        <span class="status warn">{{ homeGraphicSlides.observed[homeGraphicIndex].status }}</span>
+                      </div>
+                    </Transition>
+                    <div class="module-slide-controls">
+                      <button class="mini" aria-label="Observación anterior" @click.stop="moveHomeGraphicSlide(-1)">‹</button>
+                      <span>{{ homeGraphicIndex + 1 }} / {{ homeGraphicSlides.observed.length }}</span>
+                      <button class="mini" aria-label="Siguiente observación" @click.stop="moveHomeGraphicSlide(1)">›</button>
+                    </div>
+                  </section>
                 </article>
                 <article class="module-tile" @click="setView('aeronaves')">
-                  <div><span class="module-kicker">Analitica e indicadores</span><p>Cruza disponibilidad de aeronaves, proveedores, montos y tiempos de atencion.</p></div>
-                  <div class="module-list"><span>Aeronaves</span><span>Proveedores</span><span>Indicadores</span></div>
+                  <div><span class="module-kicker">Analitica e indicadores</span><p>Cruza disponibilidad de aeronaves, montos y tiempos de atencion.</p></div>
+                  <div class="module-list"><span>Aeronaves</span><span>Indicadores</span></div>
                 </article>
-                <article class="module-tile" @click="setView('alertas')">
+                <article class="module-tile" :class="{ 'has-open-panel': homeGraphicOpen === 'audits' }" @click="setView('alertas')">
                   <div><span class="module-kicker">Integridad anticorrupcion</span><p>Monitoreo digital para alertas, riesgos y auditorias periodicas.</p></div>
-                  <div class="module-list"><span>Monitoreo digital</span><span>Alertas y riesgos</span><span>Auditorias periodicas</span></div>
+                  <div class="module-list"><span>Monitoreo digital</span><span>Alertas y riesgos</span><button class="module-tab" :aria-expanded="homeGraphicOpen === 'audits'" @click.stop="toggleHomeGraphic('audits')">Auditorias periodicas</button></div>
+                  <section v-if="homeGraphicOpen === 'audits'" class="module-slide-panel" aria-label="Cronograma de próximas auditorías" @click.stop>
+                    <Transition name="module-slide" mode="out-in">
+                      <div :key="'audits-' + homeGraphicIndex" class="module-slide-copy">
+                        <span class="module-slide-count">Auditoría {{ homeGraphicIndex + 1 }} de {{ homeGraphicSlides.audits.length }}</span>
+                        <h3>{{ homeGraphicSlides.audits[homeGraphicIndex].title }}</h3>
+                        <p>{{ homeGraphicSlides.audits[homeGraphicIndex].detail }}</p>
+                        <span class="status info">{{ homeGraphicSlides.audits[homeGraphicIndex].status }}</span>
+                      </div>
+                    </Transition>
+                    <div class="module-slide-controls">
+                      <button class="mini" aria-label="Auditoría anterior" @click.stop="moveHomeGraphicSlide(-1)">‹</button>
+                      <span>{{ homeGraphicIndex + 1 }} / {{ homeGraphicSlides.audits.length }}</span>
+                      <button class="mini" aria-label="Siguiente auditoría" @click.stop="moveHomeGraphicSlide(1)">›</button>
+                    </div>
+                  </section>
                 </article>
               </section>
               <section class="metric-grid">

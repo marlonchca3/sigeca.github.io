@@ -444,6 +444,10 @@ h3 {
   border-color: #b8c9dc;
 }
 
+.module-tile.has-open-panel::before {
+  display: none;
+}
+
 .module-kicker {
   display: block;
   margin-bottom: 8px;
@@ -478,6 +482,99 @@ h3 {
   color: #17375f;
   font-size: 13px;
   font-weight: 800;
+}
+
+.module-tab {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 11px;
+  border: 1px solid #cfe0ef;
+  border-radius: 8px;
+  background: #f7fbff;
+  color: #17375f;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.module-tab:hover,
+.module-tab[aria-expanded="true"] {
+  border-color: #8eb3d6;
+  background: #eaf4fd;
+}
+
+.module-tab:focus-visible,
+.module-slide-controls .mini:focus-visible {
+  outline: 2px solid #3178b9;
+  outline-offset: 2px;
+}
+
+.module-slide-panel {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  min-width: 0;
+  padding: 14px 16px;
+  border-top: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f7fbff;
+}
+
+.module-slide-copy {
+  min-width: 0;
+  min-height: 84px;
+}
+
+.module-slide-count {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.module-slide-copy h3 {
+  margin: 5px 0;
+  color: var(--navy);
+  font-size: 15px;
+}
+
+.module-slide-copy p {
+  margin: 0 0 8px;
+}
+
+.module-slide-controls {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.module-slide-controls .mini {
+  min-width: 34px;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.module-slide-enter-active,
+.module-slide-leave-active {
+  transition: opacity 140ms ease, transform 140ms ease;
+}
+
+.module-slide-enter-from {
+  opacity: 0;
+  transform: translateX(12px);
+}
+
+.module-slide-leave-to {
+  opacity: 0;
+  transform: translateX(-12px);
 }
 
 .metric-card {
@@ -1569,6 +1666,16 @@ td {
     display: none;
   }
 
+  .module-slide-panel {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .module-slide-controls {
+    justify-content: flex-end;
+  }
+
   .metric-grid,
   .record-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1630,6 +1737,7 @@ body::after {
   }
 
   .module-list span,
+  .module-tab,
   .tag,
   .status {
     white-space: normal;
